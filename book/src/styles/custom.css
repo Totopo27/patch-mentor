@@ -1,0 +1,55 @@
+/* KaTeX mathematical typesetting styles */
+@import 'katex/dist/katex.min.css';
+
+/* Custom typography & hierarchy adjustments for university-level technical book */
+
+:root {
+  --sl-content-width: 68rem;
+  --sl-sidebar-width: 18rem;
+
+  /* Typography scale */
+  --sl-text-h1: 1.75rem;
+  --sl-text-h2: 1.35rem;
+  --sl-text-h3: 1.15rem;
+  --sl-text-h4: 1.05rem;
+  --sl-text-h5: 0.95rem;
+  --sl-text-body: 0.975rem;
+}
+
+/* Tabular alignment for numbers, frequencies, voltages */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Diagram container styling for embedded Archify SVGs/HTML */
+.diagram-container {
+  margin: 1.5rem 0;
+  border: 1px solid var(--sl-color-hairline);
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: var(--sl-color-bg-inline-code);
+}
+
+.diagram-container iframe {
+  width: 100%;
+  border: none;
+  min-height: 480px;
+  display: block;
+}
+
+/* Callout boxes for golden rules and voltage warnings */
+.voltage-warning {
+  border-left: 4px solid #e11d48;
+  background: rgba(225, 29, 72, 0.08);
+  padding: 1rem 1.25rem;
+  margin: 1.25rem 0;
+  border-radius: 0 6px 6px 0;
+}
+
+.golden-rule {
+  border-left: 4px solid #0284c7;
+  background: rgba(2, 132, 199, 0.08);
+  padding: 1rem 1.25rem;
+  margin: 1.25rem 0;
+  border-radius: 0 6px 6px 0;
+}

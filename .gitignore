@@ -1,0 +1,24 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build outputs
+dist/
+.astro/
+
+# Environment and IDE
+.env
+.env.*
+!.env.example
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Large local binary bibliography (PDFs/DJVUs exceed GitHub file limits)
+Bibliografía eurorack/**/*.pdf
+Bibliografía eurorack/**/*.djvu
+*.pdf
+*.djvu
