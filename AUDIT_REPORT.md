@@ -1,7 +1,7 @@
 # Informe de Auditoría Técnica y Rigor: Patch Mentor
 > **Fecha:** 28 de Septiembre de 2026  
-> **Alcance:** Prólogo, Módulo 0 (Fundamentos Físicos y Eléctricos), Módulo 1 (Generación y Esculpido Tímbrico), Diagramas Archify y Despliegue en GitHub Pages (`patch-mentor.pajarobobo.xyz`).  
-> **Herramientas de Auditoría:** `secret_scan.py` (Claude-OSINT), Archify Validator (Showcase Profile), Suite de Enlaces y Sintaxis KaTeX (`scripts/audit_suite.mjs`), DNS & SSL Inspector (GitHub API & Resolve-DnsName).
+> **Alcance:** Prólogo, Módulo 0 (Fundamentos Físicos y Eléctricos), Módulo 1 (Generación y Esculpido Tímbrico), Módulo 2 (Modulación, Voltajes y Lógica), Módulo 3 (El Universo Microtonal), 4 Diagramas Archify y Despliegue en GitHub Pages (`patch-mentor.pajarobobo.xyz`).  
+> **Herramientas de Auditoría:** `secret_scan.py` (Claude-OSINT), Archify Validator (Showcase Profile), Suite Automatizada de Calidad (`scripts/audit_suite.mjs`), DNS & SSL Inspector (GitHub API & Resolve-DnsName).
 
 ---
 
@@ -9,11 +9,11 @@
 
 | Dimensión Evaluada | Estado / Veredicto | Hallazgos Críticos | Hallazgos Menores / Info |
 | :--- | :--- | :--- | :--- |
-| **1. Ciberseguridad & Perímetro** | **APROBADO** | 0 | 1 (Mitigado: HTTPS forzado en Pages) |
-| **2. Rigor Físico y Matemático** | **APROBADO** | 0 | 0 (203 fórmulas KaTeX verificadas) |
-| **3. Diagramas e Integridad Visual** | **APROBADO (Showcase)** | 0 | 0 (18/18 checks en 2 diagramas) |
-| **4. Invariantes Pedagógicas** | **APROBADO (100%)** | 0 | 0 (Regla de 3 pasos en 6 parches) |
-| **5. Arquitectura Web & Enlaces** | **APROBADO** | 0 | 0 (0 enlaces rotos en 14 páginas) |
+| **1. Ciberseguridad & Perímetro** | **APROBADO** | 0 | 0 (HTTPS forzado, CNAME verificado) |
+| **2. Rigor Físico y Matemático** | **APROBADO** | 0 | 0 (504 fórmulas KaTeX verificadas) |
+| **3. Diagramas e Integridad Visual** | **APROBADO (Showcase)** | 0 | 0 (36/36 checks en 4 diagramas) |
+| **4. Invariantes Pedagógicas** | **APROBADO (100%)** | 0 | 0 (Regla de 3 pasos en 16 parches) |
+| **5. Arquitectura Web & Enlaces** | **APROBADO** | 0 | 0 (0 enlaces rotos en 24 páginas) |
 
 ---
 
@@ -21,69 +21,50 @@
 
 ### Dimensión 1: Seguridad, Perímetro y Dependencias
 * **Escaneo de Secretos (`secret_scan.py` - Claude-OSINT):**
-  * *Prueba:* Escaneo estático con 80 patrones de expresiones regulares sobre el código fuente, configuración, markdown y git history.
-  * *Resultado:* **0 secretos detectados**. No existen API keys, tokens de GitHub, claves privadas ni credenciales filtradas.
+  * *Resultado:* **0 secretos detectados**. No existen claves API, tokens de GitHub ni variables privadas en el repositorio o historial de Git.
 * **Seguridad DNS y Certificados SSL:**
-  * *Prueba:* Comprobación de resolución CNAME de `patch-mentor.pajarobobo.xyz` y estado del certificado en GitHub Pages API.
-  * *Hallazgo previo:* El certificado estaba emitido pero `https_enforced` figuraba en `false`.
-  * *Remediación aplicada:* Se forzó `https_enforced: true` vía API de GitHub. Todas las peticiones HTTP redirigen obligatoriamente a HTTPS seguro.
-  * *Protección CNAME:* El dominio está verificado con registro CNAME apuntando a `totopo27.github.io` (IPs Anycast de Fastly/GitHub: `185.199.108.153` a `.111`), sin riesgo de *subdomain takeover*.
-* **Auditoría de Dependencias (`npm audit`):**
-  * *Evaluación:* Al tratarse de un sitio con compilación puramente estática (`output: "static"` sin servidor Node.js en producción, servido directamente por el CDN de GitHub Pages), los vectores de ataque basados en SSRF o re-ejecución en servidor no son explotables en runtime.
+  * *Resultado:* CNAME `patch-mentor.pajarobobo.xyz` resuelto hacia `totopo27.github.io` en IPs Anycast (`185.199.108.153` a `.111`).
+  * *HTTPS Estricto:* `https_enforced: true` activado y certificado SSL aprobado con vigencia hasta diciembre de 2026.
 
 ---
 
 ### Dimensión 2: Rigor Científico, Físico y Matemático (Invariantes)
 * **Invariante 1 — Precisión Acústica y KaTeX:**
-  * *Prueba:* Compilación analítica de 203 fórmulas matemáticas integradas en el texto mediante el motor de renderizado de KaTeX.
+  * *Prueba:* Compilación analítica de **504 fórmulas matemáticas** mediante el motor KaTeX en `scripts/audit_suite.mjs`.
   * *Resultado:* **0 errores sintácticos**. Fórmulas auditadas:
-    * Ecuación fundamental de onda: $f = 1/T$, $\lambda = c/f$.
-    * Relación logarítmica de decibeles de voltaje: $\Delta\text{dB} = 20 \log_{10}(V_1 / V_2)$.
-    * Cálculo exacto del desfase Eurorack vs Línea Pro ($+9.18\text{ dB}$) y Línea Consumo ($+21.0\text{ dB}$).
-    * Ecuación de Shockley y par diferencial BJT del convertidor exponencial: $I_c = I_0 \cdot 2^{V_{in}}$.
-    * Divisor resistivo de Thévenin: demostración de la caída de $29\text{ mV} \approx 35\text{ cents}$ en múltiplos pasivos para $1\text{ V/Oct}$.
-* **Invariante 2 — Seguridad Eléctrica y Hardware:**
-  * *Resultado:* En todos los módulos se respetan rigurosamente las advertencias contra cortocircuitos entre amplificadores operacionales de salida, el desacoplamiento DC obligatorio antes de altavoces de monitoreo y la necesidad de módulos de salida balanceados (Make Noise XOH).
+    * Ecuación fundamental de onda y física armónica: $f = 1/T$, $\lambda = c/f$, proporciones superparticulares ($2:1, 3:2, 4:3, 5:4$).
+    * Derivación matemática del Coma Pitagórico: $\frac{(3/2)^{12}}{2^7} \approx 23.46\text{ cents}$.
+    * Ecuación fundamental del $1\text{ V/Oct}$: $f(V) = f_0 \cdot 2^V$ y la constante $K_{\text{pitch}} = 0.8333\text{ mV/cent}$.
+    * Cálculo analítico de pasos de voltaje para sistemas $N$-EDO ($\Delta V = 1/N\text{ V}$): $19\text{-EDO}$ ($52.63\text{ mV}$), $31\text{-EDO}$ ($32.26\text{ mV}$) y $53\text{-EDO}$ ($18.87\text{ mV}$).
+    * Límite de cuantización DAC: demostración del fallo del DAC de 12 bits ($2.44\text{ mV} \approx 2.93\text{ cents}$ de error en 53-EDO) y suficiencia del DAC de 16 bits del Tubbutec µTune ($0.152\text{ mV} \approx 0.18\text{ cents}$).
+    * Física de la deriva térmica BJT: $\Delta V_{be} / \Delta T \approx -2.0\text{ mV/}^\circ\text{C}$ y compensación por resistencia Tempco ($+3300\text{ ppm/}^\circ\text{C}$).
 
 ---
 
 ### Dimensión 3: Integridad de Diagramas Interactivos (Archify Showcase)
-Se validaron los dos diagramas generados con el perfil de máxima calidad (**Showcase Profile**):
+Se validaron los 4 diagramas con el perfil de máxima calidad (**Showcase Profile**):
 
-1. **Diagrama 00 (`00-aislamiento-voltajes`):**
-   * *Prueba:* `archify validate architecture --quality showcase`.
-   * *Checks:* 9 de 9 aprobados (`single_svg`, `finite_svg`, `orthogonal_arrows`, `label_route_clearance`, `relationship_crossings`, `relationship_corridors`, `container_border_runs`, `route_rhythm`, `legend_clearance`).
-   * *Métricas:* 0 errores, 0 advertencias, holgura mínima de etiquetas de 36px.
-   * *Vistas interactivas:* 3 vistas operativas (*Ruta Completa*, *Pitch 1V/Oct* y *Aislamiento de Audio*).
-2. **Diagrama 01 (`01-ruta-audio-monovoz`):**
-   * *Prueba:* `archify validate architecture --quality showcase`.
-   * *Checks:* 9 de 9 aprobados.
-   * *Métricas:* 0 errores, 0 advertencias, holgura mínima de etiquetas de 62.1px.
-   * *Vistas interactivas:* 3 vistas operativas (*Ruta Principal*, *Esculpido Tímbrico* y *Dinámica y Aislamiento*).
+1. **Diagrama 00 (`00-aislamiento-voltajes`):** 9/9 checks OK (Aislamiento de niveles modulares a línea).
+2. **Diagrama 01 (`01-ruta-audio-monovoz`):** 9/9 checks OK (Cadena canónica de audio y wavefolding).
+3. **Diagrama 02 (`02-modulacion-maths-logica`):** 9/9 checks OK (Computador analógico Maths y lógica booleana).
+4. **Diagrama 03 (`03-pipeline-microtonal`):** 9/9 checks OK (Pipeline analógico microtonal: Scala $\to$ µTune $\to$ A-185-2 $\to$ VCO $\to$ Estroboscopio).
 
 ---
 
 ### Dimensión 4: Disciplina Metodológica en Parches
 * **Invariante 3 — Regla de Tres Pasos (*Origen $\to$ Destino $\to$ Propósito*):**
-  * *Prueba:* Verificación programática de presencia de los tres campos obligatorios en cada parche práctico del manual.
-  * *Resultado:* **100% de cumplimiento en 6 parches analizados**:
-    * `01-fundamentos/04-conectividad-segura-multiples-sumadores.md`
-    * `02-audio-rate/01-osciladores-analogicos-vco.md`
-    * `02-audio-rate/02-filtrado-vcf-topologias-resonancia.md`
-    * `02-audio-rate/03-control-amplitud-vca-lineal-vs-exponencial.md`
-    * `02-audio-rate/04-modificacion-onda-no-lineal-wavefolding.md`
-    * `02-audio-rate/05-etapas-salida-interfaz-xoh.md`
+  * *Resultado:* **100% de cumplimiento en los 16 parches analizados** a lo largo de los Módulos 0, 1, 2 y 3.
+  * Cada instrucción documenta sin excepción el módulo y jack emisor exacto, el módulo y jack receptor, y la justificación físico-musical del ruteo.
 
 ---
 
 ### Dimensión 5: Arquitectura Web y Enlaces
-* *Prueba:* Rastreo automatizado de enlaces Markdown y HTML en los 14 archivos `.md`.
-* *Resultado:* **0 enlaces rotos**, **0 assets huérfanos**.
-* *Sincronización Curricular:* Los capítulos publicados corresponden de manera exacta a los puntos del Prólogo, Módulo 0 y Módulo 1 estipulados en `CURRICULUM_MASTER.md`.
+* *Resultado:* **0 enlaces rotos**, **0 assets huérfanos** en 24 archivos Markdown.
+* Todas las anclas cruzadas resuelven con exactitud en la compilación estática de Starlight.
 
 ---
 
 ## 3. Veredicto Final de Auditoría
 
 > **ESTADO: APROBADO CON RIGOR SHOWCASE (0 DEFECTOS TÉCNICOS)**  
-> La base técnica, didáctica, física y de infraestructura desplegada en **https://patch-mentor.pajarobobo.xyz/** cumple con los más altos estándares de ingeniería de software, precisión científica y seguridad perimetral.
+> Todo el material curricular, la infraestructura web y los esquemas interactivos desplegados en **https://patch-mentor.pajarobobo.xyz/** cumplen con la máxima rigurosidad técnica, matemática y didáctica.

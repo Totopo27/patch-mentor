@@ -1,0 +1,227 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Pipeline Microtonal Analógico de Alta Precisión",
+    "output": "03-pipeline-microtonal.html",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "full-pipeline",
+        "label": "Pipeline Completo de Afinacion",
+        "focus": ["scala_source", "midi_input", "utune_core", "precision_adder", "vco_micro", "strobe_analysis"],
+        "note": "Cadena de transformacion desde las tablas matematicas Scala hasta la oscilacion analoga de microtonalidad."
+      },
+      {
+        "id": "dac-precision-stage",
+        "label": "Etapa DAC y Suma Calibrada",
+        "focus": ["utune_core", "precision_adder", "temp_compensator"],
+        "note": "Aislamiento de la precision del convertidor de 16 bits y las resistencias al 0.1% del A-185-2."
+      },
+      {
+        "id": "acoustic-verification",
+        "label": "Sintesis Microtonal y Verificacion",
+        "focus": ["precision_adder", "vco_micro", "vco_just", "strobe_analysis"],
+        "note": "Comparativa timbrica entre afinaciones temperadas (N-EDO) y afinacion justa medida en estroboscopio."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "scala_source",
+      "type": "cloud",
+      "label": "Scala Library",
+      "sublabel": ".scl & .kbm Scales",
+      "pos": [40, 220],
+      "size": [160, 64],
+      "tag": "Microtonal DB"
+    },
+    {
+      "id": "midi_input",
+      "type": "external",
+      "label": "MIDI Controller",
+      "sublabel": "Continuous Pitch",
+      "pos": [40, 440],
+      "size": [160, 64],
+      "tag": "Pitch Data"
+    },
+    {
+      "id": "temp_compensator",
+      "type": "backend",
+      "label": "Thermal Tempco",
+      "sublabel": "Drift Stabilizer",
+      "pos": [520, 70],
+      "size": [160, 64],
+      "tag": "+3300 ppm/C"
+    },
+    {
+      "id": "utune_core",
+      "type": "security",
+      "label": "Tubbutec uTune",
+      "sublabel": "16-bit High-Res DAC",
+      "pos": [280, 220],
+      "size": [160, 64],
+      "tag": "Quantizer"
+    },
+    {
+      "id": "utune_exp",
+      "type": "security",
+      "label": "uTune Expander",
+      "sublabel": "Scale Morphing CV",
+      "pos": [280, 440],
+      "size": [160, 64],
+      "tag": "Aux CV Outs"
+    },
+    {
+      "id": "precision_adder",
+      "type": "backend",
+      "label": "Doepfer A-185-2",
+      "sublabel": "Precision Bus Adder",
+      "pos": [520, 220],
+      "size": [160, 64],
+      "tag": "0.1% Resistors"
+    },
+    {
+      "id": "vco_micro",
+      "type": "backend",
+      "label": "Microtonal VCO 1",
+      "sublabel": "1V/Oct (N-EDO)",
+      "pos": [760, 220],
+      "size": [160, 64],
+      "tag": "19/31/53-EDO"
+    },
+    {
+      "id": "vco_just",
+      "type": "backend",
+      "label": "Reference VCO 2",
+      "sublabel": "Harmonic Ratios",
+      "pos": [760, 440],
+      "size": [160, 64],
+      "tag": "Just Intonation"
+    },
+    {
+      "id": "strobe_analysis",
+      "type": "external",
+      "label": "Strobe Tuner",
+      "sublabel": "Pitch Analysis",
+      "pos": [980, 330],
+      "size": [140, 64],
+      "tag": "+/- 0.1 Cent"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "security-group",
+      "label": "Definición y Cuantización Microtonal (Scala / uTune)",
+      "wraps": ["scala_source", "midi_input", "utune_core", "utune_exp"]
+    },
+    {
+      "kind": "region",
+      "label": "Etapa de Precisión y Calibración Térmica",
+      "wraps": ["precision_adder", "temp_compensator"]
+    },
+    {
+      "kind": "region",
+      "label": "Osciladores y Verificación Acústica",
+      "wraps": ["vco_micro", "vco_just", "strobe_analysis"]
+    }
+  ],
+  "connections": [
+    {
+      "id": "scala-to-utune",
+      "from": "scala_source",
+      "to": "utune_core",
+      "label": "Scale Tables",
+      "variant": "security"
+    },
+    {
+      "id": "midi-to-exp",
+      "from": "midi_input",
+      "to": "utune_exp",
+      "label": "MIDI In",
+      "variant": "emphasis"
+    },
+    {
+      "id": "exp-to-core",
+      "from": "utune_exp",
+      "to": "utune_core",
+      "label": "Bus Sync",
+      "variant": "security",
+      "fromSide": "top",
+      "toSide": "bottom",
+      "labelDy": -40
+    },
+    {
+      "id": "temp-to-adder",
+      "from": "temp_compensator",
+      "to": "precision_adder",
+      "label": "Tempco Bias",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelDy": 25
+    },
+    {
+      "id": "utune-to-adder",
+      "from": "utune_core",
+      "to": "precision_adder",
+      "label": "Microtonal CV",
+      "variant": "emphasis"
+    },
+    {
+      "id": "adder-to-vco",
+      "from": "precision_adder",
+      "to": "vco_micro",
+      "label": "Stepped 1V/Oct",
+      "variant": "emphasis"
+    },
+    {
+      "id": "exp-to-vco2",
+      "from": "utune_exp",
+      "to": "vco_just",
+      "label": "Just Ratio CV",
+      "variant": "security"
+    },
+    {
+      "id": "vco1-to-strobe",
+      "from": "vco_micro",
+      "to": "strobe_analysis",
+      "label": "Audio 10Vpp",
+      "fromSide": "right",
+      "toSide": "top"
+    },
+    {
+      "id": "vco2-to-strobe",
+      "from": "vco_just",
+      "to": "strobe_analysis",
+      "label": "Ref Audio",
+      "fromSide": "right",
+      "toSide": "bottom"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Cuantización Digital Microtonal",
+      "items": [
+        "El Tubbutec uTune carga archivos Scala (.scl y .kbm) convirtiendo notas MIDI a pasos de voltaje no estándar.",
+        "Un convertidor DAC de 16 bits entrega una resolución inferior a 0.2 mV, permitiendo afinar sistemas como el 53-EDO."
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Estabilidad Analógica y Suma",
+      "items": [
+        "El Doepfer A-185-2 suma octavas y transposiciones con resistencias al 0.1% para evitar desviaciones en cents.",
+        "Resistencias tempco (+3300 ppm/°C) compensan la deriva térmica del par de transistores exponenciales."
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Verificación y Afinación Justa",
+      "items": [
+        "Un oscilador secundario sintonizado en Just Intonation permite auditar los batimientos acústicos en tiempo real.",
+        "El estroboscopio verifica desviaciones con precisión de décimas de centésima de semitono."
+      ]
+    }
+  ]
+}
