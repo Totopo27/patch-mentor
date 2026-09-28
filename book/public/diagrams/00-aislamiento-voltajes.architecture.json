@@ -1,0 +1,243 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Aislamiento de Niveles y Flujo Eléctrico de Señal",
+    "output": "00-aislamiento-voltajes.html",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "full-pipeline",
+        "label": "Ruta Completa",
+        "focus": ["daw", "utune", "precision_adder", "vco", "vcf", "vca", "xoh"],
+        "note": "Flujo continuo desde el control MIDI/DAW hasta la generacion de audio y retorno a nivel de linea."
+      },
+      {
+        "id": "pitch-cv-precision",
+        "label": "Cadena de Pitch 1V/Oct",
+        "focus": ["utune", "precision_adder", "vco"],
+        "note": "Ruta de maxima precision para voltajes continuos calibrados de afinacion."
+      },
+      {
+        "id": "audio-attenuation",
+        "label": "Aislamiento de Audio 10Vpp a Linea",
+        "focus": ["vca", "xoh", "daw", "reface"],
+        "note": "Atenuacion obligatoria de niveles modulares antes de ingresar a preamplificadores o DAW."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "daw",
+      "type": "external",
+      "label": "DAW / Audio Interface",
+      "sublabel": "Line Level / MIDI Clock",
+      "pos": [40, 180],
+      "size": [160, 64]
+    },
+    {
+      "id": "reface",
+      "type": "external",
+      "label": "Yamaha Reface DX",
+      "sublabel": "Digital FM (Line Level)",
+      "pos": [40, 400],
+      "size": [160, 64]
+    },
+    {
+      "id": "utune",
+      "type": "security",
+      "label": "Tubbutec uTune",
+      "sublabel": "MIDI-to-CV / Quantizer",
+      "pos": [310, 180],
+      "size": [160, 64],
+      "tag": "Calibrated DAC"
+    },
+    {
+      "id": "xoh",
+      "type": "security",
+      "label": "Make Noise XOH",
+      "sublabel": "Output Isolator / Atten",
+      "pos": [310, 400],
+      "size": [160, 64],
+      "tag": "10Vpp to Line"
+    },
+    {
+      "id": "precision_adder",
+      "type": "backend",
+      "label": "Doepfer A-185-2",
+      "sublabel": "Precision Adder",
+      "pos": [560, 180],
+      "size": [150, 64],
+      "tag": "Active 1V/Oct"
+    },
+    {
+      "id": "mult_pasivo",
+      "type": "messagebus",
+      "label": "Doepfer A-180",
+      "sublabel": "Passive Multiple",
+      "pos": [560, 400],
+      "size": [150, 64],
+      "tag": "1 Out to 2+ In"
+    },
+    {
+      "id": "vco",
+      "type": "backend",
+      "label": "Analog VCO",
+      "sublabel": "10 Vpp Audio Raw",
+      "pos": [790, 180],
+      "size": [140, 64]
+    },
+    {
+      "id": "maths",
+      "type": "cloud",
+      "label": "Make Noise Maths",
+      "sublabel": "Slew / 0 to +8V Env",
+      "pos": [790, 400],
+      "size": [140, 64]
+    },
+    {
+      "id": "vcf",
+      "type": "backend",
+      "label": "VCF Filter",
+      "sublabel": "Cutoff Mod / Audio",
+      "pos": [1010, 180],
+      "size": [140, 64]
+    },
+    {
+      "id": "vca",
+      "type": "backend",
+      "label": "VCA Amplifier",
+      "sublabel": "Audio Level Control",
+      "pos": [1010, 400],
+      "size": [140, 64]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Estudio y Nivel de Linea (+4 dBu / MIDI)",
+      "wraps": ["daw", "reface"]
+    },
+    {
+      "kind": "security-group",
+      "label": "Etapa de Interfaz y Conversion Segura",
+      "wraps": ["utune", "xoh"]
+    },
+    {
+      "kind": "region",
+      "label": "Dominio Modular Eurorack (~10 Vpp / +/- 5V CV)",
+      "wraps": ["precision_adder", "vco", "vcf", "vca", "maths", "mult_pasivo"]
+    }
+  ],
+  "connections": [
+    {
+      "id": "daw-to-utune",
+      "from": "daw",
+      "to": "utune",
+      "label": "MIDI Out",
+      "variant": "emphasis"
+    },
+    {
+      "id": "daw-to-reface",
+      "from": "daw",
+      "to": "reface",
+      "label": "MTS SysEx",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelDy": 80
+    },
+    {
+      "id": "utune-to-adder",
+      "from": "utune",
+      "to": "precision_adder",
+      "label": "Pitch 1V/Oct",
+      "variant": "security"
+    },
+    {
+      "id": "utune-gate-to-mult",
+      "from": "utune",
+      "to": "mult_pasivo",
+      "label": "Gate Pulse",
+      "fromSide": "bottom",
+      "toSide": "left"
+    },
+    {
+      "id": "adder-to-vco",
+      "from": "precision_adder",
+      "to": "vco",
+      "label": "Calibrated CV",
+      "variant": "security"
+    },
+    {
+      "id": "mult-to-maths",
+      "from": "mult_pasivo",
+      "to": "maths",
+      "label": "Trigger In"
+    },
+    {
+      "id": "vco-to-vcf",
+      "from": "vco",
+      "to": "vcf",
+      "label": "Audio 10Vpp",
+      "variant": "emphasis"
+    },
+    {
+      "id": "maths-to-vca",
+      "from": "maths",
+      "to": "vca",
+      "label": "Env CV Out"
+    },
+    {
+      "id": "vcf-to-vca",
+      "from": "vcf",
+      "to": "vca",
+      "label": "Filtered Audio",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelDy": 40
+    },
+    {
+      "id": "vca-to-xoh",
+      "from": "vca",
+      "to": "xoh",
+      "label": "Modular 10Vpp",
+      "fromSide": "bottom",
+      "toSide": "right"
+    },
+    {
+      "id": "xoh-to-daw",
+      "from": "xoh",
+      "to": "daw",
+      "label": "Line +4 dBu",
+      "variant": "security",
+      "fromSide": "left",
+      "toSide": "bottom"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Protocolo Digital y Pitch",
+      "items": [
+        "El DAW envia MIDI Notes hacia el convertidor DAC calibrado (uTune) y SysEx MTS hacia el Reface DX.",
+        "Los voltajes de afinacion (1V/Oct) solo deben sumarse con adders de precision como el Doepfer A-185-2."
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Nucleo de Sintesis Modular",
+      "items": [
+        "El VCO genera formas de onda bipolares de ~10 Vpp (+/- 5V).",
+        "El audio viaja por filtros y amplificadores gobernados por envolventes generadas por Maths."
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Aislamiento y Proteccion",
+      "items": [
+        "El modulo de salida (Make Noise XOH) atenua la senal modular de 10 Vpp a nivel de linea estandar (+4 dBu).",
+        "Nunca conectar salidas de oscilador directamente a entradas de linea de interfaces sin atenuador activo."
+      ]
+    }
+  ]
+}
