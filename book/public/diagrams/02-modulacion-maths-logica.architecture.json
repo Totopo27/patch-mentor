@@ -1,0 +1,250 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Arquitectura de Modulación Compleja y Computación Analógica",
+    "output": "02-modulacion-maths-logica.html",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "full-modulation",
+        "label": "Ruta Completa de Modulacion",
+        "focus": ["clock_master", "maths_ch1", "maths_ch4", "maths_ch23", "maths_bus", "logic_a166", "sample_hold", "vco_target", "vcf_target", "vca_target"],
+        "note": "Interconexion de integradores slew, atenuvertores, puertas logicas y generacion escalonada S&H."
+      },
+      {
+        "id": "maths-cross-modulation",
+        "label": "Bucle Cruzado en Maths",
+        "focus": ["maths_ch1", "maths_ch4", "maths_bus"],
+        "note": "Modulacion cruzada entre canales 1 y 4 usando salidas de pulso EOR/EOF y bus analogico OR."
+      },
+      {
+        "id": "boolean-logic-and-sh",
+        "label": "Logica Booleana y Sample & Hold",
+        "focus": ["clock_master", "logic_a166", "sample_hold", "vcf_target"],
+        "note": "Generacion de ritmos no lineales con compuertas logicas y cuantizacion temporal escalonada."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "clock_master",
+      "type": "external",
+      "label": "Master Clock",
+      "sublabel": "Gate Pulses (0 to +5V)",
+      "pos": [40, 140],
+      "size": [160, 64]
+    },
+    {
+      "id": "maths_ch1",
+      "type": "cloud",
+      "label": "Maths Ch 1 (Slew)",
+      "sublabel": "Rise/Fall Envelope",
+      "pos": [270, 140],
+      "size": [160, 64],
+      "tag": "EOR Pulse"
+    },
+    {
+      "id": "maths_ch4",
+      "type": "cloud",
+      "label": "Maths Ch 4 (Slew)",
+      "sublabel": "Log to Exp Curves",
+      "pos": [270, 420],
+      "size": [160, 64],
+      "tag": "EOF Pulse"
+    },
+    {
+      "id": "maths_ch23",
+      "type": "backend",
+      "label": "Maths Ch 2/3",
+      "sublabel": "Bipolar Attenuverter",
+      "pos": [500, 280],
+      "size": [160, 64],
+      "tag": "+/- 10V DC"
+    },
+    {
+      "id": "maths_bus",
+      "type": "backend",
+      "label": "Maths Analog Bus",
+      "sublabel": "SUM, OR, INV Outs",
+      "pos": [500, 420],
+      "size": [160, 64],
+      "tag": "Analog OR"
+    },
+    {
+      "id": "logic_a166",
+      "type": "security",
+      "label": "Doepfer A-166",
+      "sublabel": "Boolean Logic (AND/XOR)",
+      "pos": [730, 140],
+      "size": [160, 64],
+      "tag": "Pulse Logic"
+    },
+    {
+      "id": "sample_hold",
+      "type": "security",
+      "label": "Sample & Hold",
+      "sublabel": "Stepped Random CV",
+      "pos": [730, 280],
+      "size": [160, 64],
+      "tag": "Clocked"
+    },
+    {
+      "id": "vco_target",
+      "type": "backend",
+      "label": "VCO Pitch/FM",
+      "sublabel": "Exponential FM In",
+      "pos": [960, 140],
+      "size": [150, 64]
+    },
+    {
+      "id": "vcf_target",
+      "type": "backend",
+      "label": "VCF Cutoff",
+      "sublabel": "Stepped Resonance",
+      "pos": [960, 280],
+      "size": [150, 64]
+    },
+    {
+      "id": "vca_target",
+      "type": "backend",
+      "label": "VCA Dynamics",
+      "sublabel": "Contoured Envelope",
+      "pos": [960, 420],
+      "size": [150, 64]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Computador Analógico de Señal (Make Noise Maths)",
+      "wraps": ["maths_ch1", "maths_ch4", "maths_ch23", "maths_bus"]
+    },
+    {
+      "kind": "security-group",
+      "label": "Etapa de Lógica y Muestreo (Doepfer A-166)",
+      "wraps": ["logic_a166", "sample_hold"]
+    },
+    {
+      "kind": "region",
+      "label": "Destinos Modulares de Síntesis",
+      "wraps": ["vco_target", "vcf_target", "vca_target"]
+    }
+  ],
+  "connections": [
+    {
+      "id": "clock-to-ch1",
+      "from": "clock_master",
+      "to": "maths_ch1",
+      "label": "Gate Clock",
+      "variant": "emphasis"
+    },
+    {
+      "id": "eor-to-logic",
+      "from": "maths_ch1",
+      "to": "logic_a166",
+      "label": "EOR Pulse",
+      "variant": "security",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "logic-to-vco",
+      "from": "logic_a166",
+      "to": "vco_target",
+      "label": "Rhythmic FM",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "ch1-to-ch4",
+      "from": "maths_ch1",
+      "to": "maths_ch4",
+      "label": "Cycle Loop",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelDy": 60
+    },
+    {
+      "id": "ch1-to-atten",
+      "from": "maths_ch1",
+      "to": "maths_ch23",
+      "label": "Slew Out",
+      "fromSide": "right",
+      "toSide": "top"
+    },
+    {
+      "id": "atten-to-sh",
+      "from": "maths_ch23",
+      "to": "sample_hold",
+      "label": "Scaled Signal",
+      "variant": "security",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "logic-to-sh",
+      "from": "logic_a166",
+      "to": "sample_hold",
+      "label": "Clock Trig",
+      "variant": "security",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelDy": 35
+    },
+    {
+      "id": "sh-to-vcf",
+      "from": "sample_hold",
+      "to": "vcf_target",
+      "label": "Stepped Cutoff",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left",
+      "labelDy": -26
+    },
+    {
+      "id": "ch4-to-bus",
+      "from": "maths_ch4",
+      "to": "maths_bus",
+      "label": "Env CV Out",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "bus-to-vca",
+      "from": "maths_bus",
+      "to": "vca_target",
+      "label": "OR Contour",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Computador Analógico Maths",
+      "items": [
+        "Los canales 1 y 4 son integradores Slew con control independiente de subida (Rise) y bajada (Fall).",
+        "Las salidas digitales EOR (End of Rise) y EOF (End of Fall) generan pulsos al concluir sus respectivas fases."
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Lógica Booleana y Muestreo",
+      "items": [
+        "El módulo A-166 combina dos trenes de pulsos mediante operaciones AND, OR y XOR para crear ritmos polimétricos.",
+        "El Sample & Hold captura el voltaje analógico fluctuante en cada pulso de reloj generando saltos tímbricos escalonados."
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Distribución a la Voz",
+      "items": [
+        "Los atenuvertores (canales 2 y 3) escalan e invierten la polaridad de las envolventes antes de inyectarlas al oscilador o filtro.",
+        "El bus analógico OR selecciona continuamente la mayor tensión presente entre los canales activos."
+      ]
+    }
+  ]
+}
