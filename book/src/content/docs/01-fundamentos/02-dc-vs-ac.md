@@ -11,20 +11,16 @@ En el audio profesional convencional (interfaces de grabación, mesas de mezcla,
 
 ## 1. La Distinción Fundamental
 
-```
-[Corriente Continua (DC)]               [Corriente Alterna (AC)]
-Voltaje estático o de cambio lento      Oscilación periódica bidireccional
-(Envolventes, LFOs lentos, Pitch CV)    (Audio audible: 20 Hz a 20,000 Hz)
+Las señales eléctricas en síntesis modular se dividen en dos naturalezas operativas complementarias:
 
-     +V ────┐                                +V    _.-._
-            │                                    /       \
-      0V ───┴─────────────                    0V ┼─────────┼───────
-                                                 \       /
-     -V                                      -V   `-._.-'
-```
-
-* **Corriente Alterna (AC):** La dirección del flujo de electrones se invierte periódicamente. La señal cruza alternadamente el eje de cero voltios ($0\text{ V}$). Todo el sonido audible es AC por definición física.
-* **Corriente Continua (DC):** La polaridad se mantiene constante en el tiempo o varía a velocidades por debajo del umbral de percepción auditiva humana ($< 20\text{ Hz}$). Las tensiones de afinación ($1\text{ V/Oct}$) y las envolventes son señales de naturaleza puramente continua.
+1. **Corriente Alterna (AC):**
+   * **Comportamiento:** Oscilación periódica o aperiódica bidireccional cuya tensión cruza simétricamente o asimétricamente el eje de referencia de cero voltios ($0\text{ V}$).
+   * **Dominio:** Audio audible ($20\text{ Hz}$ a $20\,000\text{ Hz}$).
+   * **Niveles típicos:** Ondas bipolares de $10\text{ V}_{pp}$ ($\pm 5\text{ V}$) producidas por osciladores analógicos.
+2. **Corriente Continua (DC):**
+   * **Comportamiento:** Tensión estática o que varía lentamente en el tiempo con polaridad definida, sin requerir inversión periódica respecto a tierra.
+   * **Dominio:** Tensiones de control sub-audio ($0\text{ Hz}$ a $< 20\text{ Hz}$).
+   * **Niveles típicos:** Voltajes de afinación $1\text{ V/Oct}$ ($0\text{ V}$ a $+8\text{ V}$ o $\pm 5\text{ V}$), envolventes unipolares ($0\text{ V}$ a $+8\text{ V}$) y puertas de disparo lógico *Gate* ($0\text{ V} \to +8\text{ V}$).
 
 ---
 

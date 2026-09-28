@@ -22,19 +22,14 @@ $$V_{out} = V_{sig} \cdot f(V_{cv})$$
 
 ## 2. Respuesta Lineal vs. Respuesta Exponencial
 
-La mayoría de los VCAs analógicos de alta gama (como el Doepfer A-130 o Doepfer A-132-3) disponen de un interruptor o potenciómetro continuo para alternar entre dos curvas de ganancia:
+La mayoría de los VCAs analógicos de alta gama (como el Doepfer A-130 o Doepfer A-132-3) disponen de un selector o potenciómetro continuo para alternar entre dos curvas de ganancia características:
 
-```
-[Respuesta Lineal (Ideal para CV)]           [Respuesta Exponencial (Ideal para Audio)]
-Ganancia proporcional directa                Ganancia ajustada a la percepción humana (dB)
-
-  Ganancia ▲                                   Ganancia ▲
-           │       /                                    │           _.-'
-           │      /                                     │       _.-'
-           │     /                                      │   _.-'
-           │    /                                       │_.-'
-         0 └──────────► V_cv                          0 └──────────► V_cv
-```
+| Característica | Respuesta Lineal | Respuesta Exponencial |
+| :--- | :--- | :--- |
+| **Relación de Transferencia** | $\text{Ganancia} \propto V_{cv}$ (Proporcional directa) | $\text{Ganancia en dB} \propto V_{cv}$ (Crecimiento exponencial) |
+| **Fórmula Analítica** | $V_{out} = V_{in} \cdot \left(\frac{V_{cv}}{V_{max}}\right)$ | $V_{out} = V_{in} \cdot 10^{\frac{V_{cv} - V_{max}}{k}}$ |
+| **Comportamiento Perceptivo** | Variación geométrica constante de amplitud | Compensación logarítmica de la percepción auditiva humana |
+| **Dominio de Aplicación** | **Control Voltage (CV):** LFOs, envolventes, FM lineal | **Audio Rate:** Señales audibles hacia altavoces/grabación |
 
 ### Respuesta Lineal
 La amplitud de salida es una función matemática estrictamente lineal respecto al voltaje de control:

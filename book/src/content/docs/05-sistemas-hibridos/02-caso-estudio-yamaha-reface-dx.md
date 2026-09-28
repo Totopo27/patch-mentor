@@ -31,12 +31,7 @@ Si tocás en vivo sin ordenador ni controladores externos conectados, podés cre
 
 ## 3. Estrategia B: Control Dinámico por MIDI Tuning Standard (MTS)
 
-El estándar **MIDI Tuning Standard (MTS)** (especificación CA-020 de la MIDI Association) permite redefinir la frecuencia matemática exacta de cualquiera de las 128 notas MIDI mediante mensajes de **Sistema Exclusivo (*SysEx*)**:
-
-```
-[DAW / Secuenciador Microtonal] ──► Mensajes SysEx MTS ──► [Yamaha Reface DX]
-                                 (F0 7F 00 08 02 ... F7)     Afinación Reescrita a N-EDO
-```
+El estándar **MIDI Tuning Standard (MTS)** (especificación CA-020 de la MIDI Association) permite redefinir la frecuencia matemática exacta de cualquiera de las 128 notas MIDI mediante mensajes de **Sistema Exclusivo (*SysEx*)**: el secuenciador o DAW transmite una trama universal no en tiempo real o en tiempo real directamente al puerto MIDI del Yamaha Reface DX, reescribiendo la tabla interna de frecuencias de los acumuladores de fase digitales a la escala microtonal deseada ($N$-EDO o afinación justa).
 
 ### Anatomía del Mensaje SysEx MTS Single Note Tuning:
 ```text

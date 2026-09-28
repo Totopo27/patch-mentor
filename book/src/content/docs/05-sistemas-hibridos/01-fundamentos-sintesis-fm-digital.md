@@ -31,16 +31,12 @@ $$f_{\text{bandas}} = f_c \pm n \cdot f_m \quad (n = 1, 2, 3, 4\dots)$$
 
 La amplitud individual de cada banda lateral de orden $n$ está gobernada por las **funciones de Bessel de primera especie ($J_n(I)$)**:
 
-```
-Amplitud ▲
-  1.0    │  J_0(I) (Portadora)
-         │  \
-  0.5    │   \     J_1(I) (1er Par)
-         │    \   / \
-  0.0 ───┼─────\_/___\────────► Índice de Modulación (I)
-         │            \
- -0.5    │             \__ J_2(I)
-```
+| Banda Lateral ($n$) | Frecuencia | Amplitud Espectral ($I = 0$) | Amplitud Espectral ($I \approx 2.4$) | Comportamiento Tímbrico |
+| :---: | :---: | :---: | :---: | :--- |
+| **Portadora ($J_0$)** | $f_c$ | $1.0$ (Máxima energía) | $0.0$ (Primer nulo de Bessel) | Desaparición transitoria del tono fundamental |
+| **1er Par ($J_1$)** | $f_c \pm f_m$ | $0.0$ (Inaudible) | $\sim 0.52$ (Pico de energía) | Aparición de armónicos brillantes inmediatos |
+| **2do Par ($J_2$)** | $f_c \pm 2f_m$ | $0.0$ (Inaudible) | $\sim 0.43$ (Crecimiento activo) | Expansión del ancho de banda y riqueza espectral |
+| **3er Par ($J_3$)** | $f_c \pm 3f_m$ | $0.0$ (Inaudible) | $\sim 0.20$ (Inicio de excitación) | Brillo armónico superior y formantes densos |
 
 * **Cuando $I = 0$:** Solo suena la portadora pura ($f_c$), produciendo una onda senoidal.
 * **A medida que $I$ aumenta:** La energía de la portadora decrece y se transfiere progresivamente hacia las bandas laterales superiores e inferiores ($f_c \pm f_m, f_c \pm 2f_m, f_c \pm 3f_m\dots$), generando un brillo espectral dinámico extraordinario.

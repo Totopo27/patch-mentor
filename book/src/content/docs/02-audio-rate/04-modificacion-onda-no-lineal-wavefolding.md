@@ -11,23 +11,12 @@ Mientras que la síntesis sustractiva tradicional ("East Coast", popularizada po
 
 ## 1. El Principio Físico del Wavefolding
 
-En un circuito saturador convencional (como un pedal de distorsión o un amplificador a transistores sobrecargado), cuando la señal excede los raíles de alimentación de voltaje, las crestas simplemente se recortan planas (*clipping*):
+En un circuito saturador convencional (como un pedal de distorsión o un amplificador a transistores sobrecargado), cuando la señal excede los raíles de alimentación de voltaje, las crestas simplemente se recortan planas (**clipping duro**), produciendo armónicos estridentes pero una compresión estática de la dinámica.
 
-```
-[Clipping Tradicional]                       [Wavefolding (Plegado)]
-La señal se aplasta en el límite             La señal se pliega hacia adentro al cruzar el límite
-
-       +V ─ ─ ─ ─ ─ ─ ─ ─                           +V ─ ─ ─ ─ ─ ─ ─ ─
-             .-------.                                    .       .
-            /         \                                  / \     / \
-           /           \                                /   \___/   \
-          /             \                              /             \
-```
-
-En un **Wavefolder analógico**, cuando el voltaje de la señal supera un umbral fijado por diodos y transistores polarizados, el circuito **invierte la dirección del voltaje y lo pliega hacia el centro**:
-
-* Un único plegado convierte una onda senoidal simple en una forma con múltiples crestas intermedias.
-* Al conectar varias etapas de plegado en cascada (como en el Buchla 259, Serge Wave Multipliers o el Make Noise 0-Coast), un solo oscilador puede generar timbres metálicos, vocálicos y timbales hiper-complejos sin necesidad de añadir osciladores secundarios ni desafinaciones.
+En un **Wavefolder analógico**, cuando el voltaje de la señal supera un umbral fijado por diodos y transistores polarizados, el circuito **no recorta la cresta: invierte la dirección del voltaje y lo pliega hacia el centro**:
+* **Etapa 1:** A medida que la amplitud de entrada crece más allá del umbral de conducción del diodo ($V_{th} \approx 0.6\text{ V}$ a $1.2\text{ V}$), la pendiente $\frac{dV}{dt}$ cambia de signo y la punta de la onda colapsa hacia adentro.
+* **Etapas en cascada:** Al conectar múltiples celdas de plegado no lineal en serie (como en el Buchla 259, Serge Wave Multipliers o Make Noise 0-Coast), cada pliegue subsiguiente divide la cresta principal en sub-crestas adicionales.
+* **Resultado tímbrico:** Un único oscilador senoidal o triangular puro puede generar texturas densas, espectros metálicos, formantes vocálicos y timbales complejos sin requerir osciladores secundarios ni desafinaciones.
 
 ---
 

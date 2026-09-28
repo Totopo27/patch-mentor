@@ -11,13 +11,7 @@ En la síntesis modular existen dos operaciones de enrutamiento que a simple vis
 
 ## 1. Duplicar Señales: Multiples Pasivos vs. Buffereados
 
-Un **Múltiple Pasivo (*Passive Mult*)**, como el clásico Doepfer A-180-1 o A-180-3, es simplemente un grupo de jacks unidos internamente mediante una pista de cobre común. No contiene transistores, ni chips, ni alimentación eléctrica.
-
-```
-                  ┌───► Entrada 1 (VCF Cutoff)
-Salida (LFO) ─────┼───► Entrada 2 (VCA CV)
-                  └───► Entrada 3 (Wavefolder CV)
-```
+Un **Múltiple Pasivo (*Passive Mult*)**, como el clásico Doepfer A-180-1 o A-180-3, es simplemente un grupo de jacks unidos internamente mediante una pista de cobre común. No contiene transistores, ni chips, ni alimentación eléctrica. Permite bifurcar una señal fuente única hacia múltiples entradas receptoras de alta impedancia (por ejemplo, ramificar una modulación LFO simultáneamente hacia el corte de un filtro VCF, la ganancia de un VCA y el plegador de onda).
 
 ### ¿Cuándo es Seguro el Múltiple Pasivo?
 Es perfectamente seguro y adecuado para distribuir señales de modulación o sincronización:

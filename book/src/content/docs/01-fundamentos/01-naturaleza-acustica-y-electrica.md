@@ -24,10 +24,10 @@ Toda onda periódica simple se define por tres magnitudes físicas interconectad
 
 En los instrumentos electroacústicos analógicos, no manipulamos ondas de presión directamente, sino su **análogo eléctrico**: una diferencia de potencial eléctrico ($V$, voltios) directamente proporcional a la amplitud de la vibración mecánica.
 
-```
-       [Onda Mecánica]                     [Transductor]                   [Señal Eléctrica]
-Presión de Aire (Pascales, Pa)  ───►  Micrófono / Sensor / Circuito  ───►  Voltaje (Voltios, V)
-```
+El proceso sigue una cadena de transducción física rigurosa:
+* **Onda Mecánica de Entrada:** Variaciones de presión en el aire medidas en Pascales ($\text{Pa}$).
+* **Etapa Transductora:** Micrófono, pastilla electromagnética, sensor piezoeléctrico o circuito transconductor, que convierte la energía mecánica en energía eléctrica.
+* **Señal Eléctrica Resultante:** Flujo de carga y diferencia de potencial continuo ($V$, voltios) que refleja fielmente la envolvente y frecuencia original.
 
 En un sintetizador modular analógico, un oscilador no "calcula números" como lo hace un ordenador o una app en un iPad: un **VCO (*Voltage-Controlled Oscillator*)** es un circuito oscilador analógico (generalmente basado en la carga y descarga de un condensador mediante una fuente de corriente constante) cuya frecuencia de oscilación depende directamente de una tensión de entrada.
 

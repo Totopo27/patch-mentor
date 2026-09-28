@@ -140,12 +140,18 @@ console.log('--- 3. Verificación de Diagramas Archify ---');
 const diagramsDir = path.resolve(publicDir, 'diagrams');
 let archifyErrors = [];
 if (fs.existsSync(diagramsDir)) {
-  const jsonFiles = fs.readdirSync(diagramsDir).filter(f => f.endsWith('.architecture.json'));
+  const jsonFiles = fs.readdirSync(diagramsDir).filter(f => f.endsWith('.json'));
   for (const jsonFile of jsonFiles) {
     const fullPath = path.join(diagramsDir, jsonFile);
+    let diagType = 'architecture';
+    if (jsonFile.endsWith('.lifecycle.json')) diagType = 'lifecycle';
+    else if (jsonFile.endsWith('.workflow.json')) diagType = 'workflow';
+    else if (jsonFile.endsWith('.sequence.json')) diagType = 'sequence';
+    else if (jsonFile.endsWith('.dataflow.json')) diagType = 'dataflow';
+    
     try {
       const output = execSync(
-        `node "D:\\.opencode\\skills\\archify\\bin\\archify.mjs" validate architecture "${fullPath}" --quality showcase --json`,
+        `node "D:\\.opencode\\skills\\archify\\bin\\archify.mjs" validate ${diagType} "${fullPath}" --quality showcase --json`,
         { encoding: 'utf8' }
       );
       const res = JSON.parse(output);

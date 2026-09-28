@@ -11,13 +11,10 @@ Diseñado por Tony Rolando sobre la herencia del legendario *Dual Universal Slop
 
 ## 1. Canales 1 y 4: Integradores Slew y Generadores de Función
 
-Los canales extremos (Canal 1 y Canal 4) son circuitos idénticos basados en un **limitador de pendiente (*Slew Limiter*)**:
-
-```
-Señal de Entrada (V_in) ───► [ Integrador de Tasa dV/dt ] ───► Señal Suavizada (V_out)
-                                    ▲             ▲
-                           Control [Rise]  Control [Fall]
-```
+Los canales extremos (Canal 1 y Canal 4) son circuitos idénticos basados en un **limitador de pendiente (*Slew Limiter*)**: una celda integradora analógica gobernada por condensadores y fuentes de corriente controladas por voltaje que regulan la tasa temporal máxima de variación de tensión ($\frac{dV}{dt}$):
+* **Control de Subida (`Rise`):** Fija la constante de tiempo $RC$ para variaciones de tensión crecientes ($\frac{dV}{dt} > 0$).
+* **Control de Bajada (`Fall`):** Fija la constante de tiempo $RC$ para variaciones de tensión decrecientes ($\frac{dV}{dt} < 0$).
+* **Integrador de Entrada / Salida:** Transforma discontinuidades abruptas (pulsos rectangulares o saltos de paso de secuenciador $V_{in}$) en contornos continuos suaves y diferenciables ($V_{out}$).
 
 ### Funciones Principales según el Parche:
 1. **Portamento / Glide:** Si ingresás una señal de afinación escalonada ($1\text{ V/Oct}$) por la entrada `Signal In`, el circuito limita la velocidad máxima a la que el voltaje puede subir (`Rise`) o bajar (`Fall`), produciendo un deslizamiento continuo entre notas.

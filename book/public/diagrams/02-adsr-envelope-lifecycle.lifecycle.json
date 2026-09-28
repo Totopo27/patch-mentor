@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "diagram_type": "lifecycle",
+  "meta": {
+    "title": "Ciclo de Vida de Envolvente ADSR Analógica",
+    "output": "02-adsr-envelope-lifecycle.html",
+    "viewBox": [980, 680],
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "gate-high-phases",
+        "label": "Fases de Gate Activo (A-D-S)",
+        "focus": ["idle", "attack", "decay", "sustain", "release"],
+        "note": "Evolución temporal del voltaje desde el flanco ascendente del Gate hasta la meseta de sostenimiento."
+      },
+      {
+        "id": "early-termination",
+        "label": "Interrupciones Tempranas y Retorno",
+        "focus": ["decay", "gate_drop", "interrupted", "release", "idle_reset"],
+        "note": "Tránsito directo a extinción cuando el Gate cae a 0V antes de alcanzar el nivel de Sustain."
+      }
+    ]
+  },
+  "lanes": [
+    { "id": "main", "label": "Fases Principales del Contorno ADSR" },
+    { "id": "waiting", "label": "Estados de Detección de Gate" },
+    { "id": "recovery", "label": "Descarga Dinámica y Transitorios" },
+    { "id": "terminal", "label": "Reposo y Retorno a Masa (0V)" }
+  ],
+  "states": [
+    { "id": "idle", "type": "start", "label": "Reposo (0V)", "sublabel": "espera flanco Gate", "lane": "main", "col": 0, "step": "01", "tag": "ground" },
+    { "id": "attack", "type": "active", "label": "Attack", "sublabel": "0V a +8V (pico)", "lane": "main", "col": 1, "step": "02", "tag": "dV/dt > 0" },
+    { "id": "decay", "type": "decision", "label": "Decay", "sublabel": "+8V a V_sustain", "lane": "main", "col": 2, "step": "03", "tag": "dV/dt < 0" },
+    { "id": "sustain", "type": "waiting", "label": "Sustain", "sublabel": "voltaje constante", "lane": "main", "col": 3, "step": "04", "tag": "Gate Alto" },
+    { "id": "release", "type": "success", "label": "Release", "sublabel": "V_sus a 0V (descarga)", "lane": "main", "col": 4, "step": "05", "tag": "Gate Bajo" },
+    { "id": "gate_drop", "type": "waiting", "label": "Gate Drop", "sublabel": "corte prematuro Gate", "lane": "waiting", "col": 0, "tag": "0V precoz" },
+    { "id": "interrupted", "type": "active", "label": "Corte Anticipado", "sublabel": "descarga sin sosten", "lane": "recovery", "col": 1, "tag": "decay rapido" },
+    { "id": "paused", "type": "waiting", "label": "Hold Indefinido", "sublabel": "Gate sostenido", "lane": "waiting", "col": 2, "tag": "tecla pulsada" },
+    { "id": "aborted", "type": "failure", "label": "Ciclo Cortado", "sublabel": "salto a reposo", "lane": "terminal", "col": 0, "tag": "trigger corto" },
+    { "id": "idle_reset", "type": "failure", "label": "Retorno a Masa", "sublabel": "condensador a 0V", "lane": "terminal", "col": 1, "tag": "0V estatico" },
+    { "id": "ready", "type": "success", "label": "Ciclo Completado", "sublabel": "envolvente lista", "lane": "terminal", "col": 2, "tag": "retrigger OK" }
+  ],
+  "transitions": [
+    { "from": "decay", "to": "gate_drop", "variant": "security", "route": "straight", "fromSide": "bottom", "toSide": "top" },
+    { "from": "gate_drop", "to": "aborted", "variant": "security", "route": "straight", "fromSide": "bottom", "toSide": "top" },
+    { "from": "sustain", "to": "interrupted", "variant": "security", "route": "straight", "fromSide": "bottom", "toSide": "top" },
+    { "from": "interrupted", "to": "idle_reset", "variant": "security", "route": "straight", "fromSide": "bottom", "toSide": "top" },
+    { "from": "release", "to": "paused", "variant": "dashed", "route": "straight", "fromSide": "bottom", "toSide": "top" },
+    { "from": "paused", "to": "ready", "variant": "emphasis", "route": "straight", "fromSide": "bottom", "toSide": "top" }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Fases Canónicas ADSR",
+      "items": [
+        "El ciclo principal consta de cuatro fases temporales analógicas consecutivas",
+        "Attack y Decay modulan dinámicamente las tasas dV/dt de carga del circuito",
+        "Sustain representa un nivel estático de voltaje governed por el Gate continuo"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Control de Puerta y Transitorios",
+      "items": [
+        "El estado activo de Gate mantiene el nivel de Sustain indefinidamente",
+        "Un pulso corto tipo Trigger aborta el ciclo de Sustain pasando directo a extinción",
+        "Cada nueva transición descendente de Gate inicia la descarga hacia masa"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Extinción y Retorno a Masa",
+      "items": [
+        "Release drena asintóticamente el condensador hacia cero voltios de tierra",
+        "La interrupción prematura descarga el circuito sin transitorios audibles de clic",
+        "El reposo final deja el sistema calibrado para un re-trigger instantáneo"
+      ]
+    }
+  ]
+}

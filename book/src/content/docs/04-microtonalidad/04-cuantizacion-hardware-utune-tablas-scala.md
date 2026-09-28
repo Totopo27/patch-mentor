@@ -49,14 +49,12 @@ Un archivo `.scl` define únicamente los intervalos, pero no indica en qué tecl
 
 ## 3. Arquitectura del Tubbutec µTune
 
-```
-   [Entrada MIDI / USB] ──┐
-                          ▼
-[Entrada Analógica CV In] ──► [ Microcontrolador de 32 bits ] ──► [ DAC 16 bits ] ──► Salida CV Out 1 (1V/Oct)
-                              [   Tablas Scala en Memoria   ] ──► [ DAC 16 bits ] ──► Salida CV Out 2 (Gate/Aux)
-                                         ▲
-[Entrada de Control CV] ─────────────────┘ (Scale Switch / Morphing)
-```
+El módulo **Tubbutec µTune** opera como el núcleo de procesamiento matemático microtonal en Eurorack, integrando tres subsistemas de cálculo digital y conversión analógica:
+* **Etapa de Entrada Híbrida:** Acepta simultáneamente comandos digitales serie (vía puerto MIDI minijack / USB) y señales analógicas continuas a través de sus entradas `CV In` con convertidores ADC de alta resolución.
+* **Motor Microcontrolador de 32 bits:** Almacena internamente las tablas Scala (`.scl`) y mapas de teclado (`.kbm`), ejecutando en tiempo real las transformaciones de frecuencia y desvíos microtonales. Dispone de entradas auxiliares de control para conmutación dinámica de escalas (*Scale Switch / Morphing*).
+* **Convertidores DAC de Doble Canal (16 bits):** Genera salidas analógicas de voltaje continuo con resolución inferior a un milivoltio ($< 153\ \mu\text{V}$ por paso LSB):
+  1. `CV Out 1 (1V/Oct)`: Tensión de afinación calibrada ultra-estable.
+  2. `CV Out 2 (Gate / Aux)`: Señal de disparo de envolvente o voltaje auxiliar microtonal secundario.
 
 1. **Cuantizador Analógico:** Si introducís un voltaje continuo fluctuante (un LFO, un fader o un joystick), el conversor ADC lee la tensión y el microprocesador la redondea instantáneamente al paso de voltaje más cercano definido en la tabla Scala activa.
 2. **Conversor MIDI-to-CV Microtonal:** Recibe mensajes estándar de notas MIDI desde tu teclado o DAW y calcula el voltaje exacto en pasos de fracciones de milivoltio para los osciladores analógicos.

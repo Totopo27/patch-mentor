@@ -20,13 +20,10 @@ En un rack modular básico, los LFOs suelen ofrecer una frecuencia fija manual. 
 
 ## 2. El LFO con Retardo Integrado (Caso: Doepfer A-147-2)
 
-El módulo **Doepfer A-147-2 VCDLFO (*Voltage Controlled Delayed LFO*)** reúne en una unidad de 8 HP un circuito compuesto indispensable para articulación solista:
-
-```
-[Trigger / Gate In] ──► [Generador de Rampa Lineal] ──► [VCA Interno] ──► Salida Modulación con Fade-In
-                                                               ▲
-[Núcleo LFO (Sine, Tri, Saw, Pulse)] ─────────────────────────┘
-```
+El módulo **Doepfer A-147-2 VCDLFO (*Voltage Controlled Delayed LFO*)** reúne en una unidad de 8 HP un circuito compuesto indispensable para articulación solista, estructurado en tres sub-etapas acopladas:
+* **Generador de Rampa Lineal:** Al recibir un flanco en `Trigger / Gate In`, inicia una rampa de tensión ascendente tras un tiempo programable de retardo analógico.
+* **Núcleo LFO Multionda:** Oscilador de baja frecuencia que genera simultáneamente ondas senoidal, triangular, diente de sierra y pulso rectangular.
+* **VCA Lineal Integrado de Modulación:** Multiplica algebraicamente la onda analógica del LFO por la rampa de retardo, entregando una salida con *fade-in* progresivo.
 
 1. **Circuito de Retardo (*Delay*):** Al pulsar una tecla, un generador lineal interno espera un tiempo programable antes de comenzar a subir.
 2. **VCA Lineal Integrado:** Multiplica la onda del LFO por la rampa de retardo.

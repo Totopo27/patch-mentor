@@ -23,6 +23,7 @@ Este manual se fundamenta en literatura científica canónica de la música por 
 
 ## 2. MIDI, Afinación y Microtonalidad
 * **Huber, David Miles.** (2007). *The MIDI Manual: A Practical Guide to MIDI in the Project Studio* (3rd ed.). Focal Press.
+* **The MIDI Association & AMEI.** (2022). *MIDI Polyphonic Expression (MPE) Specification (Document Version 1.1, M1-100-UM)*.
 * **The MIDI Association.** *MIDI Tuning Standard (MTS) Specification (CA-020 / CA-021)*.
 * **Huygens-Fokker Foundation.** *Scala Scale File Specification (`.scl`) & Keyboard Mapping (`.kbm`)*. [huygens-fokker.org/scala](https://www.huygens-fokker.org/scala/).
 

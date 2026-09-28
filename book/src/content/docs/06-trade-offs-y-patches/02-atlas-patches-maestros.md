@@ -15,12 +15,9 @@ Cada parche está desglosado estrictamente bajo la regla metodológica de tres p
 
 Este parche establece la arquitectura de voz analógica de máxima fidelidad, combinando un oscilador con seguimiento $1\text{ V/Oct}$, filtrado multicresta estéreo (Make Noise QPAS) y compuerta dinámica con atenuación final en Make Noise XOH.
 
-```
-[Secuenciador Pitch] ──► [A-185-2 Adder] ──► [VCO 1V/Oct] ──► [QPAS VCF] ──► [Dual VCA] ──► [XOH Out] ──► Monitores
-                               ▲                                  ▲              ▲
-[LFO Vibrato Atenuado] ────────┘         [Maths Ch 1 (VCF Env)] ──┘              │
-                                         [Maths Ch 4 (VCA Env)] ─────────────────┘
-```
+La topología articula dos rutas convergentes:
+1. **Cadena Principal de Audio:** Señal generada en el oscilador VCO ($10\text{ V}_{pp}$), esculpida en el filtro estéreo animado QPAS, atenuada dinámicamente en el amplificador Dual VCA y acondicionada a nivel de línea balanceado en el módulo de salida Make Noise XOH.
+2. **Matriz de Control y Modulación:** Afinación melódica inyectada vía sumador de precisión Doepfer A-185-2 con micro-vibrato de LFO, sincronizada con la modulación tímbrica (Maths Ch 1 hacia QPAS) y dinámica de amplitud (Maths Ch 4 hacia Dual VCA).
 
 1. **Paso 1 (Origen $\to$ Destino $\to$ Propósito):**
    * *Origen:* `Secuenciador / Cuantizador: Salida Pitch CV (1V/Oct)`.

@@ -11,11 +11,11 @@ El mayor desafío al construir un sistema híbrido reside en la traducción de d
 
 ## 1. Conversores MIDI-to-CV: Jitter, Latencia y Resolución
 
-Un conversor MIDI-to-CV tradicional recibe paquetes de datos binarios y los transforma en voltaje analógico mediante un microcontrolador y un convertidor Digital-Analógico (DAC):
-
-```
-[Mensaje MIDI Serie] ──► [Buffer UART / USB] ──► [Microcontrolador] ──► [DAC 16 bits] ──► [Filtro Activo] ──► Voltaje CV
-```
+Un conversor MIDI-to-CV tradicional recibe paquetes de datos binarios y los transforma en voltaje analógico mediante una cadena de procesamiento secuencial:
+* **Receptor Serie / USB:** El mensaje MIDI ingresa a través del puerto físico y se almacena en el buffer del transceptor UART o controlador USB.
+* **Microcontrolador Central:** Parsea la trama de bytes (Note On, Note Off, Pitch Bend, CC), realiza el mapeo de frecuencias y escalas, y calcula la palabra binaria de salida.
+* **Convertidor Digital-Analógico (DAC 16 bits):** Convierte el valor numérico en una diferencia de potencial eléctrico escalonada.
+* **Filtro Activo de Reconstrucción:** Amplificador operacional configurado como filtro paso-bajo de bajo ruido que suaviza los escalones de conversión y elimina los residuos de alta frecuencia antes de entregar la tensión de control $1\text{ V/Oct}$.
 
 ### Factores Críticos de Calidad:
 1. **Jitter de MIDI DIN (31.25 kbaud):** El estándar MIDI tradicional por cable de 5 pines transmite a apenas $31.250\text{ bits por segundo}$. Un mensaje de nota estándar consta de 3 bytes ($24\text{ bits} + \text{bits de parada} \approx 30\text{ bits}$), tardando casi **$1\text{ milisegundo}$ por nota**. Si enviás un acorde polifónico de 4 notas con información de pitch bend, las notas se dispersan en el tiempo (*jitter* de varios milisegundos).
@@ -39,17 +39,10 @@ La serie **MOTU M-Series** y las interfaces profesionales **Expert Sleepers (ES-
 
 ## 3. Calibración de Salidas DC en el DAW
 
-Dado que una interfaz de audio no está calibrada de fábrica con voltímetros de laboratorio respecto a la escala modular, antes de tocar se ejecuta una rutina de calibración:
-
-```
-[DAW: CV Instrument] ──(Salida DC 1/4")──► [VCO: 1V/Oct In]
-        ▲                                        │
-        └───────(Entrada Audio Mic/Line)─────────┘ (Audio de Retorno)
-```
-
-1. El software envía voltajes de prueba escalonados ($0.0\text{ V}$, $+1.0\text{ V}$, $+2.0\text{ V}\dots$).
-2. La interfaz lee el audio resultante del oscilador mediante su entrada de micro/línea y mide la frecuencia en Hertz de cada ciclo.
-3. El plugin genera una **tabla de interpolación de ganancia y offset ($V = m \cdot X + b$)** en cuestión de segundos, garantizando un seguimiento de afinación impecable a lo largo de más de 6 octavas continuas.
+Dado que una interfaz de audio no está calibrada de fábrica con voltímetros de laboratorio respecto a la escala modular, antes de tocar se ejecuta una rutina de calibración en bucle cerrado:
+* **Generación de Prueba:** El plugin de control (como Ableton CV Instrument) envía voltajes escalonados de prueba ($0.0\text{ V}$, $+1.0\text{ V}$, $+2.0\text{ V}\dots$) a través de la salida analógica DC acoplada hacia la entrada $1\text{ V/Oct}$ del oscilador analógico.
+* **Captura de Retorno:** La señal de audio generada por el VCO retorna a través de una entrada de micro/línea de la interfaz hacia el DAW.
+* **Interpolación Dinámica:** El software analiza el periodo fundamental en Hertz de cada ciclo recibido y genera una **tabla de interpolación de ganancia y offset ($V = m \cdot X + b$)** en cuestión de segundos, garantizando un seguimiento de afinación impecable a lo largo de más de 6 octavas continuas.
 
 ---
 

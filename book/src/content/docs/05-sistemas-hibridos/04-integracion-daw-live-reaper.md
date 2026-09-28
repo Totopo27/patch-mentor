@@ -13,23 +13,19 @@ Hoy es posible orquestar en tiempo real sintetizadores digitales (como el Yamaha
 
 ## 1. El Sistema de Afinación Nativo de Ableton Live 12
 
-Ableton Live 12 introdujo una arquitectura de afinación integrada directamente en el motor central del secuenciador:
-
-```
-[Transporte de Live 12: Selector de Afinación]
-                   │ (Carga directa de .scl y .ascl)
-                   ▼
-     ┌─────────────┴─────────────┐
-     ▼                           ▼
-[Editor de Notas MIDI]      [Dispositivos MPE / Hardware]
-Piano roll reconfigurado    Curvas de afinación por nota
-a N-EDO o afinación justa   vía MTS / Pitch Bend multicanal
-```
+Ableton Live 12 introdujo una arquitectura de afinación integrada directamente en el motor central del secuenciador. Desde el selector global en la barra de transporte (donde se importan directamente archivos `.scl` y `.ascl`), el motor distribuye simultáneamente la escala hacia dos destinos fundamentales:
+1. **Editor de Notas MIDI (Piano Roll):** Reconfigura la cuadrícula visual de semitonos tradicionales adaptándola a las $N$ divisiones microtonales de la escala activa con nombres de intervalos y marcadores en cents.
+2. **Dispositivos MPE y Hardware Externo:** Genera curvas de afinación analítica por voz mediante tramas MTS SysEx o desvíos de Pitch Bend multicanal en tiempo real.
 
 ### Características Clave:
 * **Importación Directa de Archivos Scala (`.scl` y `.ascl`):** Basta con arrastrar cualquier archivo Scala a la barra de transporte para que toda la sesión adopte instantáneamente la escala microtonal.
 * **Transformación Visual del Piano Roll:** Las teclas del editor de notas ya no muestran los 12 semitonos estándar: se adaptan al número exacto de divisiones ($19$, $31$ o $53$ divisiones por octava) con nombres de intervalos y marcadores de frecuencia en cents.
-* **Soporte Nativo de MPE (*MIDI Polyphonic Expression*):** Para sintetizadores que no disponen de soporte SysEx directo, Live 12 traduce cada nota microtonal calculando el desvío exacto en centésimas y enviándolo mediante mensajes de *Pitch Bend* polifónicos independientes en canales MIDI separados.
+* **Soporte Nativo de MPE (*MIDI Polyphonic Expression*, M1-100-UM v1.1):** Para sintetizadores e interfaces que no disponen de soporte SysEx directo, Live 12 traduce cada voz microtonal calculando el desvío exacto en centésimas y enviándolo mediante la arquitectura MPE estandarizada:
+  * **Topología de Zonas:** Un *Manager Channel* (Canal 1 en Lower Zone o Canal 16 en Upper Zone) para controladores globales (CC#64 Sustain, modulación global) y *Member Channels* dedicados (ej. Canales 2 a 15) donde cada nota activa ocupa un canal independiente.
+  * **Sensibilidad de Pitch Bend Normativa:** Por especificación MMA/AMEI, los canales miembros se configuran en $\pm 48$ semitonos y el canal manager en $\pm 2$ semitonos (vía RPN #0). A 48 semitonos de rango con Pitch Bend de 14 bits (16384 pasos), la resolución teórica resultante es de $0.586\text{ cents}$ por paso, suficiente para afinación continua y microtonalidad analítica inaudiblemente cuantizada.
+  * **Cálculo Normativo de Pitch Bend (Appendix C):** El valor de Pitch Bend de 14 bits enviado por el DAW ($pbVal$) para un desvío microtonal en semitonos ($pbMem$) con sensibilidad $S_{mem} = 48$ se deriva asimétricamente debido al centro neutral en 8192:
+    $$pbVal = \min\left(\operatorname{round}\left(\frac{pbMem \times 8192}{S_{mem}}\right) + 8192,\; 16383\right)$$
+  * **Setup Pre-Note On:** Todo mensaje de Pitch Bend microtonal, Channel Pressure (aftertouch polifónico) y CC#74 (timbre/brillo) debe transmitirse inmediatamente *antes* del mensaje de Note On para asegurar que el ataque del oscilador nazca en la frecuencia exacta sin transitorios de deslizamiento.
 
 ---
 

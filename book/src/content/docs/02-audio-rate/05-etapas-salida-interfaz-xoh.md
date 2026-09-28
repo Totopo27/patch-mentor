@@ -23,14 +23,11 @@ Un módulo de salida dedicado (como el **Make Noise XOH**, el Doepfer A-138p/o o
 
 El **Make Noise XOH** es un módulo de salida estéreo compacto (6 HP) diseñado específicamente para ser la frontera final de un rack Eurorack:
 
-```
-Entrada Canal 1 (L/Mono) ───┬───► [Atenuador y Buffer] ───┬───► Salida Estéreo L/R (Línea)
-                            │                             │
-Entrada Canal 2 (R) ────────┘                             └───► Amplificador de Auriculares (1/4" Jack)
-```
-
+* **Topología de Doble Entrada Estéreo (Part A y Part B):** Permite sumar dos fuentes estéreo independientes (por ejemplo, voz sintética principal y submezcla de percusión) hacia una misma etapa de acondicionamiento analógico.
 * **Entradas Estéreo Normalizadas:** Si insertás un cable únicamente en la entrada izquierda (`L / Mono`), la señal se normaliza internamente al canal derecho (`R`), permitiendo escuchar un parche monofónico centrado en ambos canales sin cables divisores extra.
-* **Canales Independientes de Mezcla (Part A & Part B):** Permite sumar dos mezclas estéreo distintas antes de la salida final (ideal para combinar la voz solista y una línea de percusión).
+* **Etapa de Acondicionamiento (Atenuador y Buffer Activo):** Reduce la señal modular de $10\text{ V}_{pp}$ a nivel de línea seguro y alimenta dos buses de salida independientes:
+  1. **Salida Estéreo de Línea (L/R):** Calibrada para alimentar entradas balanceadas/no balanceadas de mesas de mezclas o convertidores ADC (+4 dBu).
+  2. **Amplificador de Auriculares Dedicado:** Circuito de alta corriente con conector jack 1/4" TRS capaz de excitar cargas de baja impedancia sin distorsión ni pérdida de graves.
 * **Control Dual de Volumen:** Potenciómetros dedicados e independientes para el volumen de salida a monitores (*Line Out Level*) y el amplificador de auriculares (*Headphone Level*).
 
 ---

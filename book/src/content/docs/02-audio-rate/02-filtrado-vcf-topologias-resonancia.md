@@ -43,13 +43,9 @@ El **Make Noise QPAS (*Quad Peak Animation System*)** expande la topología trad
 
 ## 3. Resonancia y Auto-Oscilación ($1\text{ V/Oct}$)
 
-La resonancia se produce realimentando la salida del filtro hacia su propia entrada:
+La resonancia se produce mediante una topología de bucle cerrado donde la señal filtrada en los polos centrales se muestrea, se atenúa/amplifica mediante el potenciómetro de *Q* o resonancia ($\beta$), y se inyecta nuevamente en contrafase o con desfase acumulado al sumador de entrada $(+)$:
 
-```
-Entrada Audio ───(+)───► [Núcleo VCF (Polos)] ───┬───► Salida Audio
-                  ▲                              │
-                  └─── [Control de Resonancia] ──┘ (Bucle de Realimentación)
-```
+$$\text{Función de Transferencia con Realimentación:} \quad H(s) = \frac{A(s)}{1 + \beta \cdot A(s)}$$
 
 Al aumentar el control de resonancia:
 1. El circuito amplifica fuertemente la banda de frecuencias exactamente en $f_c$.

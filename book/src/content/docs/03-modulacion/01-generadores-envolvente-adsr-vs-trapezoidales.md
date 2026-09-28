@@ -13,20 +13,23 @@ Si los osciladores generan el espectro continuo y los filtros esculpen su balanc
 
 Estandarizado por Robert Moog a mediados de los años sesenta, el contorno ADSR divide el ciclo de vida de un evento musical en cuatro fases gobernadas por un pulso digital de **Gate**:
 
-```
- Voltaje ▲       [Attack]       [Decay]     [Sustain]           [Release]
-   +8V   │          /\
-         │         /  \
-Sustain  │        /    \___________________
-         │       /                         \
-    0V   └──────┴───────────────────────────┴────────► Tiempo
-  Gate   ───────[======== GATE ALTO ========]──────── (Gate Bajo)
-```
+1. **Attack (Ataque):** Tiempo que tarda el voltaje en ascender desde $0\text{ V}$ hasta su pico máximo (típicamente $+8\text{ V}$ o $+10\text{ V}$). Se inicia inmediatamente con el flanco ascendente del Gate. Tasa de cambio de potencial positiva ($\frac{dV}{dt} > 0$).
+2. **Decay (Caída inicial):** Tiempo en el que el voltaje desciende desde el pico hasta el nivel establecido por el control de Sustain. Tasa de cambio negativa ($\frac{dV}{dt} < 0$).
+3. **Sustain (Sostenimiento):** **Es un nivel de voltaje, no un tiempo.** Representa la tensión continua constante a la que se estabiliza la envolvente mientras el Gate permanezca en estado alto ($+5\text{ V}$ DC).
+4. **Release (Relajación o Extinción):** Tiempo que tarda el voltaje en decaer asintóticamente desde el nivel de Sustain hasta $0\text{ V}$ una vez que el Gate cae a estado bajo ($0\text{ V}$).
 
-1. **Attack (Ataque):** Tiempo que tarda el voltaje en ascender desde $0\text{ V}$ hasta su pico máximo (típicamente $+8\text{ V}$ o $+10\text{ V}$). Se inicia inmediatamente con el flanco ascendente del Gate.
-2. **Decay (Caída inicial):** Tiempo en el que el voltaje desciende desde el pico hasta el nivel establecido por el control de Sustain.
-3. **Sustain (Sostenimiento):** **Es un nivel de voltaje, no un tiempo.** Representa la tensión continua constante a la que se estabiliza la envolvente mientras el Gate permanezca en estado alto ($+5\text{ V}$).
-4. **Release (Relajación o Extinción):** Tiempo que tarda el voltaje en decaer desde el nivel de Sustain hasta $0\text{ V}$ una vez que el Gate cae a estado bajo ($0\text{ V}$).
+A continuación se presenta el modelo interactivo de ciclo de vida de la envolvente analógica elaborado con **Archify**:
+
+<div class="diagram-container">
+  <iframe src="/diagrams/02-adsr-envelope-lifecycle.html" title="Diagrama Archify del Ciclo de Vida de Envolvente ADSR" loading="lazy"></iframe>
+</div>
+
+:::tip[Vistas Interactivas del Diagrama de Envolvente]
+Podés explorar este ciclo de estados interactivo con dos enfoques analíticos:
+* **Fases de Gate Activo (A-D-S):** Seguimiento del ciclo ordenado desde el reposo hasta la meseta de sostenimiento.
+* **Interrupciones Tempranas y Retorno:** Visualización del comportamiento transitorio cuando un pulso corto tipo Trigger corta el Gate antes de alcanzar la fase de Sustain.
+👉 [**Abrir Diagrama en Pantalla Completa**](/diagrams/02-adsr-envelope-lifecycle.html)
+:::
 
 ---
 

@@ -20,18 +20,9 @@ El módulo **Doepfer A-166 Dual Logic Module** procesa dos señales binarias de 
 | **0** | **1** | 0 | 1 | 1 | Disparo individual de canal B |
 | **1** | **1** | **1** | **1** | **0** | Sincronización y polirritmia avanzada |
 
-```
-[Compuerta AND]                          [Compuerta XOR]
-Solo suena cuando A y B coinciden        Se apaga cuando A y B coinciden
-
- A: ──[==]───[==]───[==]───               A: ──[==]───[==]───[==]───
- B: ─────[======]──────[==]               B: ─────[======]──────[==]
-AND: ────[==]──────────[==]             XOR: ──[==]──────[==]───────
-```
-
-* **AND (Conjunción):** Máscara rítmica. Permite que un redoble de batería o una modulación rápida solo suene durante el compás en que un segundo reloj maestro está activo.
-* **OR (Disyunción):** Fusión rítmica. Une dos líneas de batería o pulsos desfasados en un único flujo de gatillos sincopados.
-* **XOR (O Exclusivo):** Creación de polirritmias generativas impredecibles: cuando dos secuencias rítmicas chocan en el mismo tiempo, la compuerta se silencia, rompiendo la monotonía del patrón.
+* **AND (Conjunción):** Máscara rítmica. Solo produce pulso alto cuando ambas señales $A$ y $B$ están en estado alto simultáneamente. Permite que un redoble de batería o una modulación rápida solo suene durante el compás en que un segundo reloj maestro está activo.
+* **OR (Disyunción):** Fusión rítmica. Produce pulso alto si $A$, $B$ o ambos están activos. Une dos líneas de batería o pulsos desfasados en un único flujo de gatillos sincopados.
+* **XOR (O Exclusivo):** Creación de polirritmias generativas impredecibles: produce pulso alto cuando $A$ o $B$ están activos por separado, pero se apaga a $0\text{ V}$ cuando ambos coinciden en el mismo instante, rompiendo la monotonía del patrón.
 
 ---
 
@@ -48,13 +39,10 @@ Cuando las señales de entrada no son pulsos digitales binarios ($0\text{ V}$ o 
 
 ## 3. Sample & Hold (Muestreo y Retención)
 
-Un circuito **Sample & Hold (S&H)** es el puente clásico entre el azar analógico y el control determinista:
-
-```
-Entrada de Señal (Ruido Blanco / LFO) ──► [ Interruptor JFET ] ──► [ Condensador ] ──► [ Buffer FET ] ──► Salida CV
-                                                  ▲
-Entrada de Reloj (Clock In) ──────────────────────┘
-```
+Un circuito **Sample & Hold (S&H)** es el puente clásico entre el azar analógico y el control determinista, compuesto por tres bloques de estado sólido:
+* **Interruptor Analógico JFET:** Gobernado por el jack de reloj (*Clock In*). Permite el paso de la señal de entrada hacia la memoria analógica únicamente durante el flanco de disparo.
+* **Condensador de Retención:** Almacena la carga electrostática proporcional a la tensión instantánea de entrada.
+* **Buffer Seguidor FET de Entrada Ultra-Alta:** Amplificador operacional con impedancia de entrada en el orden de los gigaohmios ($> 10^{12}\ \Omega$), que lee el potencial retenido sin drenar la carga del condensador ni introducir *droop* perceptible.
 
 1. **Muestreo (*Sample*):** En el flanco ascendente de cada pulso de reloj, el interruptor a transistor JFET se cierra durante microsegundos, cargando el condensador al voltaje exacto que la fuente presentaba en ese instante.
 2. **Retención (*Hold*):** El interruptor se abre y el condensador almacena la carga eléctrica. Un amplificador operacional con transistores de efecto de campo (FET) de ultra-alta impedancia de entrada lee el voltaje sin descargarlo.
