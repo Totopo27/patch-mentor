@@ -1,0 +1,217 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Arquitectura de Voz Analógica: Ruta de Audio Canónica",
+    "output": "01-ruta-audio-monovoz.html",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "audio-core",
+        "label": "Ruta de Audio Principal",
+        "focus": ["vco", "wavefolder", "vcf", "vca", "xoh"],
+        "note": "Cadena de transformacion timbrica desde la generacion en el VCO hasta la salida balanceada en XOH."
+      },
+      {
+        "id": "timbral-shaping",
+        "label": "Esculpido Timbrico (Fold + Filter)",
+        "focus": ["vco", "wavefolder", "vcf", "adsr_filter"],
+        "note": "Combinacion de generacion de armonicos (wavefolding) y sustraccion selectiva (filtro resonante)."
+      },
+      {
+        "id": "dynamics-output",
+        "label": "Dinamica y Aislamiento de Salida",
+        "focus": ["vcf", "vca", "adsr_amp", "xoh", "monitors"],
+        "note": "Control de amplitud con VCA exponencial y atenuacion balanceada a nivel de linea."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "pitch_src",
+      "type": "security",
+      "label": "Pitch CV Bus",
+      "sublabel": "1V/Oct Calibrated",
+      "pos": [40, 100],
+      "size": [160, 60]
+    },
+    {
+      "id": "adsr_filter",
+      "type": "cloud",
+      "label": "VCF Envelope",
+      "sublabel": "Cutoff Modulation",
+      "pos": [510, 100],
+      "size": [160, 60]
+    },
+    {
+      "id": "adsr_amp",
+      "type": "cloud",
+      "label": "VCA Envelope",
+      "sublabel": "Amp Gate (0 to +8V)",
+      "pos": [760, 100],
+      "size": [160, 60]
+    },
+    {
+      "id": "vco",
+      "type": "backend",
+      "label": "Analog VCO",
+      "sublabel": "Saw / Tri 10Vpp",
+      "pos": [40, 280],
+      "size": [160, 64],
+      "tag": "Hard Sync"
+    },
+    {
+      "id": "wavefolder",
+      "type": "backend",
+      "label": "Wavefolder",
+      "sublabel": "Harmonic Folding",
+      "pos": [280, 280],
+      "size": [150, 64],
+      "tag": "Non-linear"
+    },
+    {
+      "id": "vcf",
+      "type": "backend",
+      "label": "Stereo VCF (QPAS)",
+      "sublabel": "Quad Peak Resonance",
+      "pos": [510, 280],
+      "size": [170, 64],
+      "tag": "LP / HP / BP"
+    },
+    {
+      "id": "vca",
+      "type": "backend",
+      "label": "Dual VCA",
+      "sublabel": "Exponential Curve",
+      "pos": [760, 280],
+      "size": [150, 64],
+      "tag": "Dynamics"
+    },
+    {
+      "id": "xoh",
+      "type": "security",
+      "label": "Make Noise XOH",
+      "sublabel": "Output & Attenuation",
+      "pos": [980, 280],
+      "size": [150, 64],
+      "tag": "10Vpp -> Line"
+    },
+    {
+      "id": "monitors",
+      "type": "external",
+      "label": "Monitors / DAW",
+      "sublabel": "+4 dBu Balanced Line",
+      "pos": [980, 440],
+      "size": [150, 64]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "security-group",
+      "label": "Buses de Modulación y Control CV",
+      "wraps": ["pitch_src", "adsr_filter", "adsr_amp"]
+    },
+    {
+      "kind": "region",
+      "label": "Cadena de Audio Modular Eurorack (~10 Vpp)",
+      "wraps": ["vco", "wavefolder", "vcf", "vca"]
+    },
+    {
+      "kind": "region",
+      "label": "Etapa de Salida y Monitoreo de Estudio",
+      "wraps": ["xoh", "monitors"]
+    }
+  ],
+  "connections": [
+    {
+      "id": "pitch-to-vco",
+      "from": "pitch_src",
+      "to": "vco",
+      "label": "1V/Oct Tracking",
+      "variant": "security",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelDy": 40
+    },
+    {
+      "id": "vco-to-wavefolder",
+      "from": "vco",
+      "to": "wavefolder",
+      "label": "Raw Tri 10Vpp",
+      "variant": "emphasis"
+    },
+    {
+      "id": "wavefolder-to-vcf",
+      "from": "wavefolder",
+      "to": "vcf",
+      "label": "Folded Audio",
+      "variant": "emphasis"
+    },
+    {
+      "id": "env-to-vcf",
+      "from": "adsr_filter",
+      "to": "vcf",
+      "label": "Cutoff CV In",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "vcf-to-vca",
+      "from": "vcf",
+      "to": "vca",
+      "label": "Filtered L/R",
+      "variant": "emphasis"
+    },
+    {
+      "id": "env-to-vca",
+      "from": "adsr_amp",
+      "to": "vca",
+      "label": "Level CV In",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "vca-to-xoh",
+      "from": "vca",
+      "to": "xoh",
+      "label": "Stereo 10Vpp",
+      "variant": "emphasis"
+    },
+    {
+      "id": "xoh-to-monitors",
+      "from": "xoh",
+      "to": "monitors",
+      "label": "+4 dBu Line Out",
+      "variant": "security",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelDy": 40
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Generación Primaria",
+      "items": [
+        "El oscilador analógico (VCO) genera ondas de núcleo triangular o sierra a nivel modular de 10 Vpp.",
+        "El wavefolder añade densidad espectral multiplicando armónicos sin necesidad de añadir osciladores extra."
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Esculpido Tímbrico y Dinámica",
+      "items": [
+        "El filtro (QPAS) esculpe las frecuencias resonantes con control unipolar de envolvente.",
+        "El VCA exponencial moldea la amplitud según la curva perceptual de la audición humana."
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Atenuación Final",
+      "items": [
+        "El Make Noise XOH reduce el nivel modular en -10 dB para alimentar interfaces y monitores de estudio sin distorsión.",
+        "Aislamiento DC para proteger transductores de monitoreo profesional."
+      ]
+    }
+  ]
+}
