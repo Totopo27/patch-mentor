@@ -1,0 +1,227 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Arquitectura Híbrida: Control Digital, FM y Eurorack",
+    "output": "04-arquitectura-hibrida.html",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "full-hybrid-system",
+        "label": "Sistema Híbrido Completo",
+        "focus": ["daw_host", "motu_interface", "reface_dx", "midi_cv_bridge", "vco_modular", "vcf_modular", "xoh_attenuator", "studio_mix"],
+        "note": "Integracion de ruteo MIDI/SysEx digital, afinacion continua microtonal en Eurorack y mezcla balanceada de audio."
+      },
+      {
+        "id": "digital-fm-tuning",
+        "label": "Ruta Digital FM (Reface DX)",
+        "focus": ["daw_host", "reface_dx", "studio_mix"],
+        "note": "Control microtonal dinamico mediante mensajes SysEx MTS hacia el motor FM de 4 operadores."
+      },
+      {
+        "id": "eurorack-analog-bridge",
+        "label": "Puente Analógico Eurorack",
+        "focus": ["motu_interface", "midi_cv_bridge", "vco_modular", "vcf_modular", "xoh_attenuator", "studio_mix"],
+        "note": "Conversion DAC calibrada y posterior atenuacion de 10 Vpp a nivel de linea con Make Noise XOH."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "daw_host",
+      "type": "cloud",
+      "label": "DAW Host",
+      "sublabel": "Ableton / Reaper (MTS)",
+      "pos": [40, 140],
+      "size": [160, 64],
+      "tag": "Digital Core"
+    },
+    {
+      "id": "motu_interface",
+      "type": "security",
+      "label": "MOTU Interface",
+      "sublabel": "DC-Coupled Line I/O",
+      "pos": [280, 140],
+      "size": [160, 64],
+      "tag": "DC Coupled"
+    },
+    {
+      "id": "reface_dx",
+      "type": "external",
+      "label": "Yamaha Reface DX",
+      "sublabel": "4-Op FM Synth",
+      "pos": [280, 380],
+      "size": [160, 64],
+      "tag": "MTS SysEx"
+    },
+    {
+      "id": "midi_cv_bridge",
+      "type": "security",
+      "label": "Tubbutec uTune",
+      "sublabel": "MIDI-to-CV / DAC",
+      "pos": [520, 140],
+      "size": [160, 64],
+      "tag": "16-bit DAC"
+    },
+    {
+      "id": "vco_modular",
+      "type": "backend",
+      "label": "Analog VCO",
+      "sublabel": "Raw 10Vpp Modular",
+      "pos": [740, 140],
+      "size": [150, 64],
+      "tag": "1V/Oct CV"
+    },
+    {
+      "id": "vcf_modular",
+      "type": "backend",
+      "label": "VCF / VCA Stage",
+      "sublabel": "Subtractive Voice",
+      "pos": [950, 140],
+      "size": [150, 64],
+      "tag": "Modular Voice"
+    },
+    {
+      "id": "xoh_attenuator",
+      "type": "security",
+      "label": "Make Noise XOH",
+      "sublabel": "Output Attenuator",
+      "pos": [950, 380],
+      "size": [150, 64],
+      "tag": "10Vpp -> Line"
+    },
+    {
+      "id": "studio_mix",
+      "type": "external",
+      "label": "Master Mixer",
+      "sublabel": "Balanced Line Inputs",
+      "pos": [520, 380],
+      "size": [160, 64],
+      "tag": "+4 dBu Mix"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "security-group",
+      "label": "Control Digital y DAW Host (MTS-ESP / USB)",
+      "wraps": ["daw_host", "motu_interface"]
+    },
+    {
+      "kind": "region",
+      "label": "Sintetizador Digital FM (Nivel de Línea)",
+      "wraps": ["reface_dx"]
+    },
+    {
+      "kind": "region",
+      "label": "Dominio Modular Eurorack (~10 Vpp / +/- 5V CV)",
+      "wraps": ["midi_cv_bridge", "vco_modular", "vcf_modular", "xoh_attenuator"]
+    },
+    {
+      "kind": "security-group",
+      "label": "Monitoreo y Retorno de Audio",
+      "wraps": ["studio_mix"]
+    }
+  ],
+  "connections": [
+    {
+      "id": "daw-to-motu",
+      "from": "daw_host",
+      "to": "motu_interface",
+      "label": "USB Audio / CV",
+      "variant": "emphasis"
+    },
+    {
+      "id": "daw-to-reface",
+      "from": "daw_host",
+      "to": "reface_dx",
+      "label": "MIDI SysEx MTS",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelDy": 40
+    },
+    {
+      "id": "motu-to-utune",
+      "from": "motu_interface",
+      "to": "midi_cv_bridge",
+      "label": "MIDI Pitch",
+      "variant": "security",
+      "labelDy": 26
+    },
+    {
+      "id": "utune-to-vco",
+      "from": "midi_cv_bridge",
+      "to": "vco_modular",
+      "label": "1V/Oct CV",
+      "variant": "emphasis",
+      "labelDy": 26
+    },
+    {
+      "id": "vco-to-vcf",
+      "from": "vco_modular",
+      "to": "vcf_modular",
+      "label": "Audio 10Vpp",
+      "variant": "emphasis"
+    },
+    {
+      "id": "vcf-to-xoh",
+      "from": "vcf_modular",
+      "to": "xoh_attenuator",
+      "label": "Modular Audio",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelDy": 40
+    },
+    {
+      "id": "reface-to-mix",
+      "from": "reface_dx",
+      "to": "studio_mix",
+      "label": "FM Line Audio",
+      "variant": "security"
+    },
+    {
+      "id": "xoh-to-mix",
+      "from": "xoh_attenuator",
+      "to": "studio_mix",
+      "label": "Line Audio Out",
+      "variant": "security",
+      "fromSide": "left",
+      "toSide": "right"
+    },
+    {
+      "id": "mix-to-motu",
+      "from": "studio_mix",
+      "to": "motu_interface",
+      "label": "Record Return",
+      "variant": "emphasis",
+      "fromSide": "top",
+      "toSide": "bottom",
+      "labelDy": -35
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Control Digital y Protocolo MTS",
+      "items": [
+        "El DAW envía mensajes de sistema exclusivo (SysEx MTS) hacia el Reface DX para redefinir la frecuencia de cada tecla en cents.",
+        "A través de interfaces acopladas DC (MOTU), el software puede generar voltajes de control de precisión sin DAC externo."
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Hibridación Analógica",
+      "items": [
+        "El Tubbutec uTune recibe notas MIDI y entrega pasos calibrados de 1V/Oct al oscilador analógico.",
+        "El módulo Make Noise XOH atenúa la salida modular de 10 Vpp para integrarla limpiamente en la mezcla con el Reface DX."
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Mezcla de Estudio y Fase",
+      "items": [
+        "El mezclador de estudio recibe ambos instrumentos a niveles de línea homogéneos (+4 dBu / -10 dBV).",
+        "Retorno balanceado a la interfaz de audio para grabación multipista y análisis espectral en tiempo real."
+      ]
+    }
+  ]
+}
