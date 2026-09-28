@@ -53,10 +53,10 @@ hero:
 ## Malla Curricular del Manual
 
 - [**Prólogo: Filosofía y Reglas Eléctricas**](/00-prologo/01-filosofia/) — Conceptos sobre cables, taxonomía visual cromática y reglas de oro contra fallos de circuito.
-- [**Módulo 0: Fundamentos Físicos y Eléctricos**](#) — Acústica, señales DC vs AC, niveles de señal ($10\text{ Vpp}$ vs $+4\text{ dBu}$) y conectividad segura.
-- [**Módulo 1: Generación y Esculpido Tímbrico**](#) — Núcleos VCO, filtrado no lineal VCF, amplificación VCA y etapas de salida.
-- [**Módulo 2: Modulación, Voltajes y Lógica**](#) — Generadores de funciones (Maths), LFOs, lógica analógica (A-166) y atenuvertores.
-- [**Módulo 3: El Universo Microtonal**](#) — Física armónica, matemáticas de $1\text{ V/Oct}$, cuantización con µTune, tablas Scala y compensación térmica.
-- [**Módulo 4: Síntesis Digital y Sistemas Híbridos**](#) — Síntesis FM (Yamaha Reface DX), MTS SysEx, conversores DAC y DAW integration.
-- [**Módulo 5: Trade-offs y Patches Maestros**](#) — Matriz de decisiones de arquitectura y atlas de parches documentados.
+- [**Módulo 0: Fundamentos Físicos y Eléctricos**](/01-fundamentos/01-naturaleza-acustica-y-electrica/) — Acústica, señales DC vs AC, niveles de señal ($10\text{ Vpp}$ vs $+4\text{ dBu}$) y conectividad segura.
+- [**Módulo 1: Generación y Esculpido Tímbrico**](/02-audio-rate/01-osciladores-analogicos-vco/) — Núcleos VCO, filtrado no lineal VCF, amplificación VCA y etapas de salida.
+- [**Módulo 2: Modulación, Voltajes y Lógica**](/03-modulacion/01-generadores-envolvente-adsr-vs-trapezoidales/) — Generadores de funciones (Maths), LFOs, lógica analógica (A-166) y atenuvertores.
+- [**Módulo 3: El Universo Microtonal**](/04-microtonalidad/01-fisica-afinacion-serie-armonica-coma/) — Física armónica, matemáticas de $1\text{ V/Oct}$, cuantización con µTune, tablas Scala y compensación térmica.
+- [**Módulo 4: Síntesis Digital y Sistemas Híbridos**](/05-sistemas-hibridos/01-fundamentos-sintesis-fm-digital/) — Síntesis FM (Yamaha Reface DX), MTS SysEx, conversores DAC y DAW integration.
+- [**Módulo 5: Trade-offs y Patches Maestros**](/06-trade-offs-y-patches/01-biblioteca-decisiones-tecnicas/) — Matriz de decisiones de arquitectura y atlas de parches documentados.
 - [**Apéndices y Referencias**](/apendices/referencias-bibliograficas/) — Fuentes primarias, manuales técnicos de fabricantes y tratados acústicos.

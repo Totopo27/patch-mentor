@@ -1,0 +1,208 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Árbol de Decisiones de Arquitectura y Trade-offs",
+    "output": "05-matriz-decisiones-tradeoffs.html",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "full-decisions-tree",
+        "label": "Árbol Completo de Decisiones",
+        "focus": ["tuning_decision", "voltage_sum_decision", "digital_control_decision", "quantization_decision", "outcome_expressive", "outcome_hybrid_fm", "outcome_westcoast", "outcome_monitors"],
+        "note": "Mapeo exhaustivo desde las decisiones teoricas fundamentales hasta la implementacion en hardware y monitoreo."
+      },
+      {
+        "id": "microtonal-decision-path",
+        "label": "Ruta de Decision Microtonal",
+        "focus": ["tuning_decision", "voltage_sum_decision", "digital_control_decision", "outcome_expressive", "outcome_westcoast"],
+        "note": "Cadena de elecciones obligatorias para garantizar afinacion estable sin desviaciones en cents."
+      },
+      {
+        "id": "hybrid-integration-path",
+        "label": "Ruta de Integracion Hibrida",
+        "focus": ["digital_control_decision", "quantization_decision", "outcome_hybrid_fm", "outcome_monitors"],
+        "note": "Ruteo de datos MIDI MTS y convergencia de audio digital con senales analogicas atenuadas."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "tuning_decision",
+      "type": "cloud",
+      "label": "Elección de Afinación",
+      "sublabel": "12-TET vs 19/31-EDO",
+      "pos": [40, 140],
+      "size": [170, 64],
+      "tag": "Acoustics"
+    },
+    {
+      "id": "voltage_sum_decision",
+      "type": "cloud",
+      "label": "Topología de Suma CV",
+      "sublabel": "Pasivo vs Precisión",
+      "pos": [40, 380],
+      "size": [170, 64],
+      "tag": "Hardware"
+    },
+    {
+      "id": "digital_control_decision",
+      "type": "security",
+      "label": "Control Digital",
+      "sublabel": "MTS SysEx vs Pitch Bend",
+      "pos": [300, 140],
+      "size": [170, 64],
+      "tag": "Protocol"
+    },
+    {
+      "id": "quantization_decision",
+      "type": "security",
+      "label": "Estrategia CV",
+      "sublabel": "Cuantizado vs Continuo",
+      "pos": [300, 380],
+      "size": [170, 64],
+      "tag": "Pitch Grid"
+    },
+    {
+      "id": "outcome_expressive",
+      "type": "backend",
+      "label": "Sistema Microtonal",
+      "sublabel": "31-EDO + A-185-2 (0.1%)",
+      "pos": [560, 140],
+      "size": [170, 64],
+      "tag": "High-Res"
+    },
+    {
+      "id": "outcome_hybrid_fm",
+      "type": "backend",
+      "label": "Sintetizador Híbrido",
+      "sublabel": "DAW MTS + Reface DX",
+      "pos": [560, 380],
+      "size": [170, 64],
+      "tag": "FM Digital"
+    },
+    {
+      "id": "outcome_westcoast",
+      "type": "backend",
+      "label": "Voz Modular Canónica",
+      "sublabel": "Maths + Wavefolder",
+      "pos": [820, 140],
+      "size": [170, 64],
+      "tag": "Analog Voice"
+    },
+    {
+      "id": "outcome_monitors",
+      "type": "external",
+      "label": "Salida de Estudio",
+      "sublabel": "Atenuación Make Noise XOH",
+      "pos": [820, 380],
+      "size": [170, 64],
+      "tag": "+4 dBu Line"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "security-group",
+      "label": "Dilemas de Diseño y Trade-offs Críticos",
+      "wraps": ["tuning_decision", "voltage_sum_decision", "digital_control_decision", "quantization_decision"]
+    },
+    {
+      "kind": "region",
+      "label": "Arquitecturas de Síntesis Validadas",
+      "wraps": ["outcome_expressive", "outcome_hybrid_fm", "outcome_westcoast"]
+    },
+    {
+      "kind": "region",
+      "label": "Monitoreo Seguro de Estudio",
+      "wraps": ["outcome_monitors"]
+    }
+  ],
+  "connections": [
+    {
+      "id": "tuning-to-control",
+      "from": "tuning_decision",
+      "to": "digital_control_decision",
+      "label": "MTS Protocol",
+      "variant": "emphasis"
+    },
+    {
+      "id": "sum-to-quant",
+      "from": "voltage_sum_decision",
+      "to": "quantization_decision",
+      "label": "0.1% Resistors",
+      "variant": "security"
+    },
+    {
+      "id": "control-to-micro",
+      "from": "digital_control_decision",
+      "to": "outcome_expressive",
+      "label": "16-bit DAC",
+      "variant": "emphasis"
+    },
+    {
+      "id": "control-to-fm",
+      "from": "digital_control_decision",
+      "to": "outcome_hybrid_fm",
+      "label": "SysEx Stream",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelDy": 30
+    },
+    {
+      "id": "quant-to-fm",
+      "from": "quantization_decision",
+      "to": "outcome_hybrid_fm",
+      "label": "DAW Sync",
+      "variant": "security"
+    },
+    {
+      "id": "micro-to-voice",
+      "from": "outcome_expressive",
+      "to": "outcome_westcoast",
+      "label": "Pitch 1V/Oct",
+      "variant": "emphasis"
+    },
+    {
+      "id": "voice-to-out",
+      "from": "outcome_westcoast",
+      "to": "outcome_monitors",
+      "label": "10Vpp Modular",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelDy": 40
+    },
+    {
+      "id": "fm-to-out",
+      "from": "outcome_hybrid_fm",
+      "to": "outcome_monitors",
+      "label": "FM Line Audio",
+      "variant": "security"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Decisiones de Afinación y Ratios",
+      "items": [
+        "12-TET sacrifica la tercera mayor (+13.7 cents de error) en favor de modulación y teclados convencionales.",
+        "31-EDO rescata la pureza de la tercera mayor (+1.2 cents) con simetría geométrica apta para sintetizadores."
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Hardware: Pasivo vs. Precisión",
+      "items": [
+        "Los múltiplos pasivos solo sirven para gates y LFOs; introducen ~35 cents de desafinación en 1V/Oct.",
+        "Sumadores con resistencias al 0.1% (Doepfer A-185-2) son obligatorios para mantener afinación microtonal estable."
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Integración y Monitoreo Seguro",
+      "items": [
+        "MTS SysEx reprograma teclados digitales completos en tiempo real sin modificar el firmware.",
+        "El módulo de salida Make Noise XOH atenúa la señal en -10 dB con aislamiento DC para proteger monitores de estudio."
+      ]
+    }
+  ]
+}
