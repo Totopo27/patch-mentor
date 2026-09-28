@@ -17,11 +17,11 @@ Cualquier transformación analógica de control se reduce a la ecuación matemá
 
 $$V_{out} = k \cdot V_{in} + V_{\text{offset}}$$
 
-```
-[1. Atenuación Pura]             [2. Atenuversión (Inversión)]     [3. Desplazamiento DC (Offset)]
-0 <= k <= 1                      -1 <= k <= +1                     Suma un voltaje constante
-Escala la amplitud               Escala e invierte la fase         Mueve el eje vertical
-```
+| Operación Afín | Parámetro de Ganancia ($k$) | Desplazamiento ($V_{\text{offset}}$) | Comportamiento Eléctrico | Función Musical |
+| :--- | :---: | :---: | :--- | :--- |
+| **1. Atenuación Pura** | $0 \le k \le 1$ | $0\text{ V}$ | Divisor resistivo pasivo que escala la amplitud | Control de profundidad de vibrato o trémolo |
+| **2. Atenuversión Activa** | $-1 \le k \le +1$ | $0\text{ V}$ | Escala e invierte la polaridad ($-V$) mediante op-amp | Envolventes inversas (cierre dinámico de filtro) |
+| **3. Desplazamiento DC (Offset)** | $k = 1$ | $V_{\text{offset}} \ne 0\text{ V}$ | Suma algebraica de tensión continua constante | Conversión bipolar ($\pm 5\text{ V}$) a unipolar ($0\text{ a }+10\text{ V}$) |
 
 ### 1.1 El Atenuador Pasivo ($0 \le k \le 1$)
 Consiste simplemente en un potenciómetro resistivo conectado como divisor de tensión hacia masa.

@@ -13,14 +13,14 @@ El **Oscilador Controlado por Tensión (*Voltage-Controlled Oscillator*, VCO)** 
 
 Todos los VCOs analógicos construyen sus formas de onda a partir de un núcleo oscilador primario basado en la carga y descarga de un condensador mediante una fuente de corriente de precisión:
 
-```
-[Núcleo Diente de Sierra (Saw Core)]           [Núcleo Triangular (Triangle Core)]
-Carga lineal constante + Reset instantáneo    Carga lineal ascendente + Descarga lineal descendente
-
-       /|  /|  /|                                    /\    /\    /\
-      / | / | / |                                   /  \  /  \  /  \
-     /  |/  |/  |                                  /    \/    \/    \
-```
+| Parámetro de Diseño | Sawtooth Core (Núcleo de Sierra) | Triangle Core (Núcleo Triangular) |
+| :--- | :--- | :--- |
+| **Dinámica del Condensador** | Carga lineal constante con descarga/reset instantáneo | Carga lineal ascendente e inversión a descarga lineal simétrica |
+| **Forma de Onda Primaria** | Rampa diente de sierra nativa ($\frac{dV}{dt} > 0$, reset $\to 0$) | Onda triangular simétrica nativa |
+| **Contenido Armónico Nativo** | Todos los armónicos enteros ($f, 2f, 3f, 4f\dots$) con caída $-6\text{ dB/oct}$ | Solo armónicos impares ($f, 3f, 5f, 7f\dots$) con caída abrupta $-12\text{ dB/oct}$ |
+| **Generación de Seno/Triángulo** | Mediante conformadores no lineales (*waveshapers*) con distorsión residual | Mediante conformador senoidal suave con pureza armónica extrema |
+| **Comportamiento en FM Lineal** | Desviación de afinación y asimetría en modulación profunda | Cruce por cero limpio y estabilidad tonal simétrica impecable |
+| **Módulos de Referencia** | Moog Mother-32, Doepfer A-110-1, ARP Odyssey | Make Noise DPO, Doepfer A-110-2, Intellijel Dixie II+ |
 
 * **Saw Core (Núcleo de Sierra):** El condensador se carga linealmente hasta alcanzar un umbral de voltaje fijado por un comparador; en ese instante, un transistor conmuta y descarga el condensador prácticamente a cero en nanosegundos.
   * *Ventaja:* Genera de forma nativa la rampa de sierra, rica en todos los armónicos enteros ($1, 2, 3, 4\dots$).

@@ -26,12 +26,10 @@ La afinación justa suena celestial en la tonalidad de reposo. Sin embargo, al m
 
 Para solucionar el problema de la modulación sin resignarse a los defectos armónicos del $12\text{-TET}$, los teóricos e ingenieros recurren a otras divisiones de la octava en $N$ partes iguales ($N\text{-EDO}$):
 
-```
-       12-EDO: 12 pasos de 100.00 cents (Terceras mayores desafinadas en +13.7 cents)
-       19-EDO: 19 pasos de  63.16 cents (Terceras menores casi perfectas a -1.1 cents)
-       31-EDO: 31 pasos de  38.71 cents (Terceras mayores puras a +1.2 cents)
-       53-EDO: 53 pasos de  22.64 cents (Quintas casi perfectas a -0.07 cents)
-```
+* **12-EDO:** 12 pasos de $100.00\text{ cents}$ ($\Delta V = 83.33\text{ mV}$). Terceras mayores desafinadas en $+13.7\text{ cents}$ respecto a la pureza $5:4$.
+* **19-EDO:** 19 pasos de $63.16\text{ cents}$ ($\Delta V = 52.63\text{ mV}$). Terceras menores casi perfectas a $-1.1\text{ cents}$ del ratio $6:5$.
+* **31-EDO:** 31 pasos de $38.71\text{ cents}$ ($\Delta V = 32.25\text{ mV}$). Terceras mayores prácticamente puras a $+1.2\text{ cents}$ del ratio $5:4$.
+* **53-EDO:** 53 pasos de $22.64\text{ cents}$ ($\Delta V = 18.86\text{ mV}$). Quintas casi perfectas con un error residual de apenas $-0.07\text{ cents}$.
 
 | Sistema $N$-EDO | Tamaño del Grado ($\text{Cents}$) | Equivalente en Voltios ($1\text{ V/Oct}$) | Ventaja Armónica Principal |
 | :---: | :---: | :---: | :--- |
