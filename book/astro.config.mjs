@@ -49,8 +49,12 @@ export default defineConfig({
           autogenerate: { directory: '05-sistemas-hibridos' },
         },
         {
-          label: 'Módulo 5: Trade-offs y Patches Maestros',
-          autogenerate: { directory: '06-trade-offs-y-patches' },
+          label: 'Módulo 5: El Ecosistema Make Noise NUSS',
+          autogenerate: { directory: '06-make-noise-nuss' },
+        },
+        {
+          label: 'Módulo 6: Decisiones Técnicas y Gran Atlas de Patches',
+          autogenerate: { directory: '07-atlas-de-patches' },
         },
         {
           label: 'Apéndices y Referencias',

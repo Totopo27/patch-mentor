@@ -1,0 +1,194 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Make Noise NUSS: Arquitectura y Topología de Señal Multicanal",
+    "output": "06-nuss-topology.html",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "full-nuss-system",
+        "label": "Sistema NUSS Completo (8 Canales)",
+        "focus": ["mpe_inlet", "multiwave", "polimaths", "multimod", "dual_qxg", "qpas", "xoh", "monitors"],
+        "note": "Topología integral de síntesis polifónica y multicanal de 8 dimensiones en el chasis 2-Zone Skiff."
+      },
+      {
+        "id": "audio-stereo-path",
+        "label": "Ruta de Audio Estéreo (8 Voces)",
+        "focus": ["multiwave", "dual_qxg", "qpas", "xoh", "monitors"],
+        "note": "Generación por tablas de ondas de 8 canales, compuertas dinámicas LPG QXG, filtrado multicresta estéreo QPAS y salida balanceada XOH."
+      },
+      {
+        "id": "modulation-orbital-field",
+        "label": "Red de Modulación y Control MPE",
+        "focus": ["mpe_inlet", "multiwave", "polimaths", "multimod", "dual_qxg", "qpas"],
+        "note": "Control multidimensional MPE USB-C, generadores de función PoliMATHS y modulación orbital desfasada MultiMod."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "mpe_inlet",
+      "type": "external",
+      "label": "MultiWAVE MIDI Inlet",
+      "sublabel": "USB-C MPE / 8 Ch Host",
+      "pos": [40, 80],
+      "size": [170, 64],
+      "tag": "MPE v1.1"
+    },
+    {
+      "id": "polimaths",
+      "type": "backend",
+      "label": "Make Noise PoliMATHS",
+      "sublabel": "8-Ch Function Generator",
+      "pos": [350, 80],
+      "size": [170, 64],
+      "tag": "EOR / EOF"
+    },
+    {
+      "id": "multimod",
+      "type": "cloud",
+      "label": "Make Noise MultiMod",
+      "sublabel": "Flock of 8 Time-Shifted LFOs",
+      "pos": [660, 80],
+      "size": [180, 64],
+      "tag": "Orbital Pan"
+    },
+    {
+      "id": "multiwave",
+      "type": "backend",
+      "label": "Make Noise MultiWAVE",
+      "sublabel": "8-Ch Wavetable Oscillator",
+      "pos": [40, 300],
+      "size": [170, 64],
+      "tag": "8 Sound Banks"
+    },
+    {
+      "id": "dual_qxg",
+      "type": "backend",
+      "label": "Dual Make Noise QXG",
+      "sublabel": "8-Ch Stereo Dynamic LPG",
+      "pos": [350, 300],
+      "size": [170, 64],
+      "tag": "Vactrol Response"
+    },
+    {
+      "id": "qpas",
+      "type": "security",
+      "label": "Make Noise QPAS",
+      "sublabel": "Quad Peak Stereo VCF",
+      "pos": [660, 300],
+      "size": [180, 64],
+      "tag": "Radiate Filter"
+    },
+    {
+      "id": "xoh",
+      "type": "security",
+      "label": "Make Noise XOH",
+      "sublabel": "Stereo Balanced Output",
+      "pos": [950, 300],
+      "size": [150, 64],
+      "tag": "+4 dBu / DC Iso"
+    },
+    {
+      "id": "monitors",
+      "type": "external",
+      "label": "Studio Monitors / DAW",
+      "sublabel": "Stereo Monitoring Line",
+      "pos": [1200, 300],
+      "size": [150, 64],
+      "tag": "Balanced Pro"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "security-group",
+      "label": "Red de Control MPE y Modulación Multidimensional (PoliMATHS & MultiMod)",
+      "wraps": ["mpe_inlet", "polimaths", "multimod"]
+    },
+    {
+      "kind": "region",
+      "label": "Cadena de Audio Multicanal y Estéreo NUSS (8 Voces en 104 HP)",
+      "wraps": ["multiwave", "dual_qxg", "qpas", "xoh"]
+    }
+  ],
+  "connections": [
+    {
+      "id": "mpe-to-multiwave",
+      "from": "mpe_inlet",
+      "to": "multiwave",
+      "label": "Pitch 1V/Oct (8 Ch)",
+      "variant": "security",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelDy": 40
+    },
+    {
+      "id": "mpe-to-polimaths",
+      "from": "mpe_inlet",
+      "to": "polimaths",
+      "label": "Pressure & Gates",
+      "fromSide": "right",
+      "toSide": "left",
+      "labelDy": -15
+    },
+    {
+      "id": "multiwave-to-qxg",
+      "from": "multiwave",
+      "to": "dual_qxg",
+      "label": "8x Audio Out",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left",
+      "labelDy": -15
+    },
+    {
+      "id": "polimaths-to-qxg",
+      "from": "polimaths",
+      "to": "dual_qxg",
+      "label": "8x Strike / Level",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelDy": 40
+    },
+    {
+      "id": "qxg-to-qpas",
+      "from": "dual_qxg",
+      "to": "qpas",
+      "label": "Stereo Mix L/R",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left",
+      "labelDy": -15
+    },
+    {
+      "id": "multimod-to-qpas",
+      "from": "multimod",
+      "to": "qpas",
+      "label": "Radiate L/R CV",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelDy": 40
+    },
+    {
+      "id": "qpas-to-xoh",
+      "from": "qpas",
+      "to": "xoh",
+      "label": "Stereo Filtered Audio",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left",
+      "labelDy": -15
+    },
+    {
+      "id": "xoh-to-monitors",
+      "from": "xoh",
+      "to": "monitors",
+      "label": "Balanced Line Out",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left",
+      "labelDy": -15
+    }
+  ]
+}

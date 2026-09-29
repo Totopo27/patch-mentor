@@ -58,5 +58,6 @@ hero:
 - [**Módulo 2: Modulación, Voltajes y Lógica**](/03-modulacion/01-generadores-envolvente-adsr-vs-trapezoidales/) — Generadores de funciones (Maths), LFOs, lógica analógica (A-166) y atenuvertores.
 - [**Módulo 3: El Universo Microtonal**](/04-microtonalidad/01-fisica-afinacion-serie-armonica-coma/) — Física armónica, matemáticas de $1\text{ V/Oct}$, cuantización con µTune, tablas Scala y compensación térmica.
 - [**Módulo 4: Síntesis Digital y Sistemas Híbridos**](/05-sistemas-hibridos/01-fundamentos-sintesis-fm-digital/) — Síntesis FM (Yamaha Reface DX), MTS SysEx, conversores DAC y DAW integration.
-- [**Módulo 5: Trade-offs y Patches Maestros**](/06-trade-offs-y-patches/01-biblioteca-decisiones-tecnicas/) — Matriz de decisiones de arquitectura y atlas de parches documentados.
+- [**Módulo 5: El Ecosistema Make Noise NUSS**](/06-make-noise-nuss/01-filosofia-diseno-nuss/) — Arquitectura de 8 canales, MultiWAVE, PoliMATHS, Dual QXG, MultiMod, QPAS, XOH y chasis 2-Zone.
+- [**Módulo 6: Decisiones Técnicas y Gran Atlas de Patches**](/07-atlas-de-patches/01-biblioteca-decisiones-tecnicas/) — Matriz de decisiones de arquitectura y atlas taxonómico de parches documentados.
 - [**Apéndices y Referencias**](/apendices/referencias-bibliograficas/) — Fuentes primarias, manuales técnicos de fabricantes y tratados acústicos.

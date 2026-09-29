@@ -1,5 +1,5 @@
 ---
-title: "5.1 Biblioteca de Decisiones Técnicas (Trade-offs)"
+title: "6.1 Biblioteca de Decisiones Técnicas (Trade-offs)"
 description: "Matrices comparativas canónicas ('X vs Y') para arquitectura de voz, afinación, enrutamiento eléctrico y protocolos."
 sidebar:
   order: 1

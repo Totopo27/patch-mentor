@@ -1,5 +1,5 @@
 ---
-title: "5.2 Atlas de Patches Maestros de Referencia"
+title: "6.2 Atlas de Patches Maestros de Referencia"
 description: "Banco de parches de referencia completos, reproducibles y documentados bajo la regla metodológica de tres pasos."
 sidebar:
   order: 2
