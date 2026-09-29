@@ -22,3 +22,6 @@ Bibliografía eurorack/**/*.pdf
 Bibliografía eurorack/**/*.djvu
 *.pdf
 *.djvu
+
+# Agent workspace caches
+.atl/
