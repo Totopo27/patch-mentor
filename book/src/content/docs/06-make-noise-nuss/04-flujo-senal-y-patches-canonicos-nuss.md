@@ -30,11 +30,14 @@ El sistema procesa ocho canales de audio discretos desde el oscilador MultiWAVE 
 
 ### 1.2. Diagrama Arquitectónico Interactivo NUSS
 
-<div class="archify-diagram-container not-content">
+<div class="diagram-container">
   <iframe src="/diagrams/06-nuss-topology.html" title="Diagrama Archify de la Topología Make Noise NUSS" loading="lazy"></iframe>
 </div>
 
+:::tip[Exploración Interactiva]
+Podés abrir el diagrama en pantalla completa para inspeccionar cada conexión, alternar entre modos claro y oscuro o aislar las tres vistas temáticas (*Sistema NUSS Completo*, *Ruta de Audio Estéreo* y *Red de Modulación MPE*):
 👉 [**Abrir Diagrama en Pantalla Completa**](/diagrams/06-nuss-topology.html)
+:::
 
 ---
 
