@@ -191,7 +191,47 @@ for (const file of mdFiles) {
 }
 console.log();
 
-// 5. RESUMEN FINAL
+// 5. CHEQUEO DE ERRADICACIÓN DE DIAGRAMAS ASCII
+console.log('--- 5. Verificación de Cero Diagramas en ASCII / Monospaciado ---');
+const boxChars = /[┌┐└┘├┤┬┴┼═║╔╗╚╝╠╣╦╩╬│─▲▼◄►]/;
+const diagramTokens = /(\+--|\+==|\[\s*[A-Z0-9_\- ]+\s*\]\s*[-=]+>|-->|<--)/;
+let asciiDiagramsCount = 0;
+
+for (const file of mdFiles) {
+  const content = fs.readFileSync(file, 'utf8');
+  const relFile = path.relative(docsDir, file).replace(/\\/g, '/');
+  const lines = content.split('\n');
+  let inCodeBlock = false;
+  let codeBlockContent = [];
+  let startLine = 0;
+
+  lines.forEach((line, idx) => {
+    if (line.trim().startsWith('```')) {
+      if (!inCodeBlock) {
+        inCodeBlock = true;
+        startLine = idx + 1;
+        codeBlockContent = [];
+      } else {
+        inCodeBlock = false;
+        const blockText = codeBlockContent.join('\n');
+        if (boxChars.test(blockText) || diagramTokens.test(blockText)) {
+          asciiDiagramsCount++;
+          console.error(`✗ [DIAGRAMA ASCII DETECTADO] ${relFile} (líneas ${startLine}-${idx + 1})`);
+        }
+      }
+    } else if (inCodeBlock) {
+      codeBlockContent.push(line);
+    }
+  });
+}
+
+if (asciiDiagramsCount === 0) {
+  console.log('✓ Cero diagramas en ASCII o esquemas monoespaciados en la totalidad de la documentación.\n');
+} else {
+  console.error(`✗ Detectados ${asciiDiagramsCount} diagramas residuales en texto monoespaciado.\n`);
+}
+
+// 6. RESUMEN FINAL
 console.log('====================================================');
 console.log('                  RESUMEN DE AUDITORÍA              ');
 console.log('====================================================');
@@ -199,8 +239,9 @@ console.log(`- Enlaces rotos:     ${brokenLinks.length}`);
 console.log(`- Errores KaTeX:     ${mathErrors.length}`);
 console.log(`- Errores Archify:   ${archifyErrors.length}`);
 console.log(`- Invariantes rotas: ${missingThreeStepCount}`);
+console.log(`- Diagramas ASCII:   ${asciiDiagramsCount}`);
 
-if (brokenLinks.length === 0 && mathErrors.length === 0 && archifyErrors.length === 0 && missingThreeStepCount === 0) {
+if (brokenLinks.length === 0 && mathErrors.length === 0 && archifyErrors.length === 0 && missingThreeStepCount === 0 && asciiDiagramsCount === 0) {
   console.log('\n>>> VEREDICTO DE AUDITORÍA: APROBADO CON RIGOR SHOWCASE (0 DEFECTOS TÉCNICOS) <<<');
 } else {
   console.log('\n>>> VEREDICTO DE AUDITORÍA: REQUIERE CORRECCIONES <<<');

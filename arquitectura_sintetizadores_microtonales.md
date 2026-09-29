@@ -66,43 +66,21 @@ El Yamaha Reface DX es un sintetizador FM de 4 operadores con control individual
 
 ## 3. Diagrama de Flujo del Sistema
 
-A continuación se muestra el esquema funcional que separa la ruta de datos/control de la ruta de audio:
+A continuación se detalla la matriz analítica de flujo que separa la ruta de datos/control de la ruta de audio (representada interactivamente en el diagrama Archify de Arquitectura Híbrida):
 
-```
-                      [Secuenciador / Controlador Microtonal]
-                                    │
-          ┌─────────────────────────┴─────────────────────────┐
-          │ (MIDI Notes / SysEx MTS)                          │ (MIDI Clock / Notes)
-          ▼                                                   ▼
-┌─────────────────────────┐                         ┌─────────────────────────┐
-│     Yamaha Reface DX    │                         │   Módulo MIDI-to-CV     │
-│  (Síntesis FM Digital)  │                         │ (Conversión DAC Calibr.)│
-└────────────┬────────────┘                         └────────────┬────────────┘
-             │                                                   │ Pitch (CV n-EDO)
-             │ Audio L/R                                         ▼
-             │                                      ┌─────────────────────────┐
-             │                                      │      VCO Analógico      │
-             │                                      │  (Seguimiento 1V/Oct)   │
-             │                                      └────────────┬────────────┘
-             │                                                   │ Audio Raw
-             │                                                   ▼
-             │                                      ┌─────────────────────────┐
-             │                                      │       VCF (Filtro)      │
-             │                                      │ (Modulación CV Cutoff)  │
-             │                                      └────────────┬────────────┘
-             │                                                   │ Audio Filtrado
-             │                                                   ▼
-             │                                      ┌─────────────────────────┐
-             │                                      │      VCA (Amplificador) │
-             │                                      │   (Control Envolvente)  │
-             │                                      └────────────┬────────────┘
-             │                                                   │ Audio Eurorack
-             ▼                                                   ▼
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                       Mezclador / Interfaz de Audio                         │
-│                    (Atenuación a nivel de línea estándar)                   │
-└─────────────────────────────────────────────────────────────────────────────┘
-```
+| Etapa de Flujo | Módulo Origen | Módulo Destino | Tipo de Señal / Nivel | Propósito de la Conexión |
+| :--- | :--- | :--- | :--- | :--- |
+| **Control Digital** | Secuenciador / Controlador | Yamaha Reface DX | MIDI Notes / SysEx MTS | Programación dinámica de afinación microtonal en los 4 operadores FM. |
+| **Sincronismo / Gate** | Secuenciador / Controlador | Módulo MIDI-to-CV | MIDI Clock & Gate | Conversión DAC calibrada de 16 bits para disparo de eventos y reloj. |
+| **Afinación Analógica** | Módulo MIDI-to-CV (DAC) | VCO Analógico | Pitch CV ($1\text{ V/Oct}$) | Tensión continua cuantizada ($\Delta V = 1\text{ V}/N$) para tracking de tono. |
+| **Ruta de Audio Raw** | VCO Analógico | VCF (Filtro) | Audio Modular ($10\text{ Vpp}$) | Entrega de forma de onda rica en armónicos hacia la etapa de esculpido. |
+| **Modulación Tímbrica** | Envolvente / LFO | VCF Cutoff CV In | CV de Modulación ($0\text{ a }+8\text{V}$) | Animación dinámica de la frecuencia de corte y resonancia. |
+| **Ruta de Audio Filtrado** | VCF (Filtro) | VCA (Amplificador) | Audio Modular ($10\text{ Vpp}$) | Inyección del espectro filtrado a la compuerta dinámica de nivel. |
+| **Control de Amplitud** | Envolvente de Amplitud | VCA CV In | CV Exponencial ($0\text{ a }+8\text{V}$) | Articulación temporal del volumen de la voz modular. |
+| **Mezcla Híbrida Digital** | Yamaha Reface DX Audio L/R | Mezclador / Interfaz | Nivel de Línea ($-10\text{ dBV}$) | Inyección de la voz FM polifónica en la mezcla de estudio. |
+| **Mezcla Híbrida Modular** | Módulo de Salida (XOH) | Mezclador / Interfaz | Nivel Balanceado ($+4\text{ dBu}$) | Atenuación segura de $10\text{ Vpp}$ a nivel de línea profesional. |
+
+> **Nota:** El flujo completo se encuentra disponible de forma interactiva en [`book/public/diagrams/04-arquitectura-hibrida.html`](https://patch-mentor.pajarobobo.xyz/diagrams/04-arquitectura-hibrida.html).
 
 ---
 
